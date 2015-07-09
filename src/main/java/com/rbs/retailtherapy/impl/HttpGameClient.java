@@ -16,11 +16,11 @@ import com.rbs.retailtherapy.entity.SelfStateResponse;
 import com.rbs.retailtherapy.interfaces.ParticipantInterface;
 import com.rbs.retailtherapy.model.ParticipantParameters;
 
-public class ParticipantImpl implements ParticipantInterface {
+public class HttpGameClient implements ParticipantInterface {
 
 	private final JsonHelper helper;
 
-	public ParticipantImpl(String connectionUrl) {
+	public HttpGameClient(String connectionUrl) {
 		helper = new JsonHelper(connectionUrl);
 	}
 
