@@ -3,10 +3,15 @@ package com.rbs.retailtherapy.client;
 import com.rbs.retailtherapy.entity.*;
 import com.rbs.retailtherapy.impl.HttpGameClient;
 import com.rbs.retailtherapy.model.Direction;
-import com.rbs.retailtherapy.model.GridCellWrapper;
 import com.rbs.retailtherapy.model.Stock;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Logger;
+
 public class HttpGameSession {
+    private static final Logger LOGGER = Logger.getLogger(HttpGameSession.class.getSimpleName());
+
     private final int participantId;
     private final HttpGameClient httpGameClient;
 
@@ -27,11 +32,11 @@ public class HttpGameSession {
         return httpGameClient.getSelfState(participantId);
     }
 
-    public RequestShopResponse requestShop(double bidAmount, GridCellWrapper gridCell) {
+    public RequestShopResponse requestShop(double bidAmount, int col, int row) {
         BuyShopParameters shopParameters = new BuyShopParameters();
         shopParameters.setBidAmount(bidAmount);
-        shopParameters.setColumn(gridCell.getCol());
-        shopParameters.setRow(gridCell.getRow());
+        shopParameters.setColumn(col);
+        shopParameters.setRow(row);
         shopParameters.setShopOwnerId(participantId);
         return httpGameClient.requestShop(shopParameters);
     }
@@ -60,5 +65,23 @@ public class HttpGameSession {
         blockerParameters.setShopId(shop.getShopId());
         blockerParameters.setShopOwnerId(participantId);
         return httpGameClient.placeBlocker(blockerParameters);
+    }
+
+    public long getLatency() {
+        ClockCheck clockCheck = new ClockCheck();
+        clockCheck.setParticipantClockInMilliSec(new Date().getTime());
+        ClockCheck clockCheckReturned = checkClock(clockCheck);
+
+        long timeDifferenceInMilliSec = clockCheckReturned.getTimeDifferenceInMilliSec();
+        String clockcheck =
+                "ClockCheck, Participant Time: "
+                        + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(clockCheckReturned.getParticipantClockInMilliSec()))
+                        + ", Retail Therapy Time: "
+                        + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(clockCheckReturned.getRetailTherapyClockInMilliSec()))
+                        + " Time Difference: "
+                        + timeDifferenceInMilliSec;
+
+        LOGGER.info("ClockCheck: " + clockcheck);
+        return timeDifferenceInMilliSec;
     }
 }

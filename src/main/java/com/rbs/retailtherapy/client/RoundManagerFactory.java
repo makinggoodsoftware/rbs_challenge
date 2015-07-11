@@ -5,21 +5,32 @@ import com.rbs.retailtherapy.entity.RoundStateResponse;
 import com.rbs.retailtherapy.impl.HttpGameClient;
 import com.rbs.retailtherapy.model.ParticipantParameters;
 
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 public class RoundManagerFactory {
     private static final Logger LOGGER = Logger.getLogger(RoundManagerFactory.class.getSimpleName());
     private final HttpGameClient httpGameClient;
     private final ParticipantParameters credentials;
+    private final ArtificialIntelligence ai;
 
-    public RoundManagerFactory(HttpGameClient httpGameClient, ParticipantParameters credentials) {
+    public RoundManagerFactory(HttpGameClient httpGameClient, ParticipantParameters credentials, ArtificialIntelligence ai) {
         this.httpGameClient = httpGameClient;
         this.credentials = credentials;
+        this.ai = ai;
     }
 
     public RoundManager newRound(RoundStateResponse roundState) {
-        RoundManager roundManager = new RoundManager(roundState, new HttpGameSession(loginForRound(), httpGameClient));
-        roundManager.onRoundStart();
+        int participantId = loginForRound();
+        RoundManager roundManager = new RoundManager(
+                ai,
+                new KnowledgeProvider(),
+                new HttpGameSession(
+                        participantId,
+                        httpGameClient
+                ),
+                Executors.newFixedThreadPool(10));
+        roundManager.onRoundStart(roundState);
         return roundManager;
     }
 

@@ -1,5 +1,6 @@
 package com.rbs.retailtherapy.client;
 
+import com.google.gson.GsonBuilder;
 import com.rbs.retailtherapy.impl.HttpGameClient;
 import com.rbs.retailtherapy.model.ParticipantParameters;
 import org.apache.log4j.Logger;
@@ -16,14 +17,21 @@ public class App {
 		try {
 			ParticipantParameters credentials = new ParticipantParameters(username, password);
             HttpGameClient httpGameClient = new HttpGameClient(baseUrl);
-            GameManager heartbeat = new GameManager(
+            GameManager gameManager = new GameManager(
                     httpGameClient,
                     new RoundManagerProvider(
                             new RoundManagerFactory(
-                                    httpGameClient, credentials)
-                    )
-            );
-            heartbeat.start();
+                                    httpGameClient,
+									credentials,
+									new ArtificialIntelligence(
+                                            new ArtificialIntelligenceConfig(
+                                                    6
+                                            )
+									)
+							)
+                    ),
+					new GsonBuilder().create());
+            gameManager.start();
 		} catch (Exception e) {
 			logger.error(e.getStackTrace()[1].getClass().getSimpleName() + ": " + e.getMessage());
 		}
