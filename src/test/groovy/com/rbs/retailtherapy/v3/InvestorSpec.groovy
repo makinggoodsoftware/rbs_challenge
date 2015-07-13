@@ -13,8 +13,6 @@ class InvestorSpec extends Specification {
     def "should invest evenly" (){
         given:
         InvestmentConfiguration investmentConfiguration = new InvestmentConfiguration(
-                50,
-                0.8,
                 0.9,
                 0.1,
                 new FixedSpacingInvestmentConfiguration(
@@ -32,7 +30,7 @@ class InvestorSpec extends Specification {
         )
 
         when:
-        Map<PlacementType, Investment> invest = investor.invest(10000, investmentConfiguration, new Dimension(41, 41))
+        Map<PlacementType, Investment> invest = investor.invest(new Dimension(41, 41), 8000, 50.0d, investmentConfiguration)
 
         then:
         invest.get(OUTTER_1st_LOOP).bidAmount == 56.84d

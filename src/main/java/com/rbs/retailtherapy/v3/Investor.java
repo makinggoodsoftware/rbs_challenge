@@ -5,30 +5,29 @@ import java.util.Map;
 
 public class Investor {
 
-    public final Map<PlacementType, Investment> invest (double amountToInvest, InvestmentConfiguration  investmentConfiguration, Dimension gridDimension){
-        double totalToInvest = amountToInvest * investmentConfiguration.getToInvestPercentage();
-        double totalOuterToInvest = totalToInvest * investmentConfiguration.getOutterInvestmentPercentage();
+    public final Map<PlacementType, Investment> invest(Dimension gridDimension, double amountToInvest, double minimumBid, InvestmentConfiguration investmentConfiguration){
+        double totalOuterToInvest = amountToInvest * investmentConfiguration.getOutterInvestmentPercentage();
         Investment outerFirstLoopInvestment = getInvestment(
                 gridDimension.reduce(1).shops(),
                 totalOuterToInvest * investmentConfiguration.getOuter1().getInvestmentPercentage(),
                 investmentConfiguration.getOuter1().getDesiredSpacing(),
-                investmentConfiguration.getMinimumBid()
+                minimumBid
         );
         Investment outerSecondLoopInvestment = getInvestment(
                 gridDimension.reduce(3).shops(),
                 totalOuterToInvest * investmentConfiguration.getOuter2().getInvestmentPercentage(),
                 investmentConfiguration.getOuter2().getDesiredSpacing(),
-                investmentConfiguration.getMinimumBid()
+                minimumBid
         );
         Investment outerThirdLoopInvestment = getInvestment(
                 gridDimension.reduce(5).shops(),
                 totalOuterToInvest * investmentConfiguration.getOuter3().getInvestmentPercentage(),
                 investmentConfiguration.getOuter3().getDesiredSpacing(),
-                investmentConfiguration.getMinimumBid()
+                minimumBid
         );
-        double totalCenetrToInvest = totalToInvest * investmentConfiguration.getCenterInvestmentPercentage();
-        Double numberOfShops = totalCenetrToInvest / investmentConfiguration.getMinimumBid();
-        Investment centerLoopInvestment = new Investment(investmentConfiguration.getMinimumBid(), Math.round(numberOfShops.intValue()));
+        double totalCenetrToInvest = amountToInvest * investmentConfiguration.getCenterInvestmentPercentage();
+        Double numberOfShops = totalCenetrToInvest / minimumBid;
+        Investment centerLoopInvestment = new Investment(minimumBid, Math.round(numberOfShops.intValue()));
 
         HashMap<PlacementType, Investment> investments = new HashMap<PlacementType, Investment>();
         investments.put(PlacementType.OUTTER_1st_LOOP, outerFirstLoopInvestment);
