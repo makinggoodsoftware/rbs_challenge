@@ -10,7 +10,7 @@ public class App {
 
 	private final static Logger logger = Logger.getLogger(App.class.getSimpleName());
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		String username = "Pulsy";
 		String password = "testing";
 		String baseUrl = "http://localhost:8081/RetailTherapy/jsonServices";
@@ -34,6 +34,7 @@ public class App {
             gameManager.start();
 		} catch (Exception e) {
 			logger.error(e.getStackTrace()[1].getClass().getSimpleName() + ": " + e.getMessage());
+			throw e;
 		}
 	}
 }

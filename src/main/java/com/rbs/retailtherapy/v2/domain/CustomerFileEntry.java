@@ -1,10 +1,10 @@
-package com.rbs.retailtherapy.client;
+package com.rbs.retailtherapy.v2.domain;
 
 import com.rbs.retailtherapy.model.Stock;
 
 import java.util.List;
 
-public class Customer {
+public class CustomerFileEntry {
     private Integer id;
     private List<Stock.StockType> stockCountCollection;
     private Double initialCash;
