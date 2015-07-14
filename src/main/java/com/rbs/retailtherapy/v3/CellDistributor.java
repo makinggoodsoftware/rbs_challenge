@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Set;
 
 public class CellDistributor {
-    private final CoordinatesSelector coordinatesSelector;
+    private final CoordinatesSelector shopCoordinatesSelector;
 
-    public CellDistributor(CoordinatesSelector coordinatesSelector) {
-        this.coordinatesSelector = coordinatesSelector;
+    public CellDistributor(CoordinatesSelector shopCoordinatesSelector) {
+        this.shopCoordinatesSelector = shopCoordinatesSelector;
     }
 
     public List<Coordinate> distribute(
@@ -16,7 +16,7 @@ public class CellDistributor {
             Coordinate startPoint,
             int numberOfDivisions
     ) {
-        Set<Coordinate> allOutterRingCoordinates = coordinatesSelector.outterRingCoordinates(grid.getDimension());
+        Set<Coordinate> allOutterRingCoordinates = shopCoordinatesSelector.outterRingCoordinates(grid.getDimension());
         List<Coordinate> sortedCoordinates = sort(allOutterRingCoordinates, startPoint);
 
         List<Coordinate> outterRingCoordinates = new ArrayList<>();
