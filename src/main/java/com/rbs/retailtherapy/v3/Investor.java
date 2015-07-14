@@ -8,19 +8,19 @@ public class Investor {
     public final Map<PlacementType, Investment> invest(Dimension gridDimension, double amountToInvest, double minimumBid, InvestmentConfiguration investmentConfiguration){
         double totalOuterToInvest = amountToInvest * investmentConfiguration.getOutterInvestmentPercentage();
         Investment outerFirstLoopInvestment = getInvestment(
-                gridDimension.reduce(1).shops(),
+                gridDimension.reduce(1).half(),
                 totalOuterToInvest * investmentConfiguration.getOuter1().getInvestmentPercentage(),
                 investmentConfiguration.getOuter1().getDesiredSpacing(),
                 minimumBid
         );
         Investment outerSecondLoopInvestment = getInvestment(
-                gridDimension.reduce(3).shops(),
+                gridDimension.reduce(3).half(),
                 totalOuterToInvest * investmentConfiguration.getOuter2().getInvestmentPercentage(),
                 investmentConfiguration.getOuter2().getDesiredSpacing(),
                 minimumBid
         );
         Investment outerThirdLoopInvestment = getInvestment(
-                gridDimension.reduce(5).shops(),
+                gridDimension.reduce(5).half(),
                 totalOuterToInvest * investmentConfiguration.getOuter3().getInvestmentPercentage(),
                 investmentConfiguration.getOuter3().getDesiredSpacing(),
                 minimumBid

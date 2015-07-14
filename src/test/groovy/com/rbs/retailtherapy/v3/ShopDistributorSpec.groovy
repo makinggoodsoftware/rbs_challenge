@@ -3,7 +3,7 @@ package com.rbs.retailtherapy.v3
 import spock.lang.Specification
 
 class ShopDistributorSpec extends Specification {
-    ShopDistributor testObj = new ShopDistributor();
+    CellDistributor testObj = new CellDistributor(coordinatesSelector);
 
     @SuppressWarnings("GrEqualsBetweenInconvertibleTypes")
     def "should distribute shops" (){

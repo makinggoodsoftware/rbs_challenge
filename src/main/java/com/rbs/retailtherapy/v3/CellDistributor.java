@@ -4,18 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class ShopDistributor {
+public class CellDistributor {
+    private final CoordinatesSelector coordinatesSelector;
+
+    public CellDistributor(CoordinatesSelector coordinatesSelector) {
+        this.coordinatesSelector = coordinatesSelector;
+    }
+
     public List<Coordinate> distribute(
             Grid grid,
             Coordinate startPoint,
             int numberOfDivisions
     ) {
-        Set<Coordinate> allOutterRingCoordinates = grid.getDimension().outterRingCoordinates();
+        Set<Coordinate> allOutterRingCoordinates = coordinatesSelector.outterRingCoordinates(grid.getDimension());
         List<Coordinate> sortedCoordinates = sort(allOutterRingCoordinates, startPoint);
-        List<Coordinate> shopCoordinates = new ArrayList<Coordinate>();
 
         List<Coordinate> outterRingCoordinates = new ArrayList<>();
-        int steps = shopCoordinates.size() / numberOfDivisions;
+        int steps = sortedCoordinates.size() / numberOfDivisions;
         int indexToExtract = 0;
         for (int i=0; i<steps; i++){
             outterRingCoordinates.add(sortedCoordinates.get(indexToExtract));
