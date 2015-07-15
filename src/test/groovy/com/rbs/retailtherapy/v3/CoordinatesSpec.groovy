@@ -2,7 +2,7 @@ package com.rbs.retailtherapy.v3
 
 import spock.lang.Specification
 
-class CoordinatesTest extends Specification {
+class CoordinatesSpec extends Specification {
     Coordinates testObj = new Coordinates()
 
 

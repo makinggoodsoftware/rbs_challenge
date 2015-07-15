@@ -5,30 +5,26 @@ import java.util.List;
 import java.util.Set;
 
 public class CellDistributor {
-    private final CoordinatesSelector shopCoordinatesSelector;
+    private final CoordinatesSelector coordinatesSelector;
+    private final Coordinates coordinates;
 
-    public CellDistributor(CoordinatesSelector shopCoordinatesSelector) {
-        this.shopCoordinatesSelector = shopCoordinatesSelector;
+    public CellDistributor(CoordinatesSelector coordinatesSelector, Coordinates coordinates) {
+        this.coordinatesSelector = coordinatesSelector;
+        this.coordinates = coordinates;
     }
 
-    public List<Coordinate> distribute(
-            Grid grid,
-            Coordinate startPoint,
+    public List<Coordinate> distributeOuterRing(
+            Dimension dimension,
             int numberOfDivisions
     ) {
-        Set<Coordinate> allOutterRingCoordinates = shopCoordinatesSelector.outterRingCoordinates(grid.getDimension());
-        List<Coordinate> sortedCoordinates = sort(allOutterRingCoordinates, startPoint);
+        Set<Coordinate> allOutterRingCoordinates = coordinatesSelector.outterRingCoordinates(dimension);
+        List<Coordinate> sortedCoordinates = coordinates.sortSquare(allOutterRingCoordinates, dimension.topLeft(), dimension.bottomRight());
 
         List<Coordinate> outterRingCoordinates = new ArrayList<>();
-        int steps = sortedCoordinates.size() / numberOfDivisions;
-        int indexToExtract = 0;
-        for (int i=0; i<steps; i++){
-            outterRingCoordinates.add(sortedCoordinates.get(indexToExtract));
+        int stepSize = sortedCoordinates.size() / numberOfDivisions;
+        for (int i=0; i<numberOfDivisions; i++){
+            outterRingCoordinates.add(sortedCoordinates.get(i*stepSize));
         }
         return outterRingCoordinates;
-    }
-
-    private List<Coordinate> sort(Set<Coordinate> allOutterRingCoordinates, Coordinate startPoint) {
-        return null;
     }
 }

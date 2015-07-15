@@ -30,45 +30,45 @@ public class GameManager {
     }
 
     public void start() throws Exception {
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream("customers.json");
-        Reader reader = new InputStreamReader(in);
-        CustomersFile customersFile = gson.fromJson(reader, CustomersFile.class);
-        Map<CustomerFileEntry, String[]> movementsByCustomer = new HashMap<>();
-        for (CustomerFileEntry customerFileEntry : customersFile.getShoppers()) {
-            String gridPositions = customerFileEntry.getGridPositions();
-            String[] movements = explodeMovements(gridPositions);
-            movementsByCustomer.put(customerFileEntry, movements);
-        }
-
-        List<Multimap<Coordinate, CustomerFileEntry>> movementsByCoordinates = new ArrayList<>();
-        boolean shouldLookupTurn = true;
-        int currentTurn = -1;
-        Set<Map.Entry<CustomerFileEntry, String[]>> movementsByCustomerEntries = movementsByCustomer.entrySet();
-        while (shouldLookupTurn){
-            currentTurn ++;
-            Multimap<Coordinate, CustomerFileEntry> movementsThisTurn = ArrayListMultimap.create();
-            shouldLookupTurn = false;
-            for (Map.Entry<CustomerFileEntry, String[]> customerMovements : movementsByCustomerEntries) {
-                String[] movements = customerMovements.getValue();
-                if (currentTurn < movements.length) {
-                    shouldLookupTurn = true;
-                    String coordinatesForTurn = movements[currentTurn];
-                    movementsThisTurn.put(new Coordinate(1, 1), customerMovements.getKey());
-                }
-            }
-            movementsByCoordinates.add(movementsThisTurn);
-        }
-
-        Map<Coordinate, Map<Integer, CustomerFileEntry>> customerInteractionsByCoordinates = new HashMap<>();
-        int currentTurnCounter = 0;
-        for (Multimap<Coordinate, CustomerFileEntry> movementsThisTurn : movementsByCoordinates) {
-            currentTurnCounter ++;
-            Map<Coordinate, Collection<CustomerFileEntry>> coordinateCollectionMap = movementsThisTurn.asMap();
-            for (Map.Entry<Coordinate, Collection<CustomerFileEntry>> coordinateCollectionEntry : coordinateCollectionMap.entrySet()) {
-                Map<Integer, CustomerFileEntry> customerInteractions;
-                customerInteractionsByCoordinates.put(coordinateCollectionEntry.getKey(), null);
-            }
-        }
+//        InputStream in = this.getClass().getClassLoader().getResourceAsStream("customers.json");
+//        Reader reader = new InputStreamReader(in);
+//        CustomersFile customersFile = gson.fromJson(reader, CustomersFile.class);
+//        Map<CustomerFileEntry, String[]> movementsByCustomer = new HashMap<>();
+//        for (CustomerFileEntry customerFileEntry : customersFile.getShoppers()) {
+//            String gridPositions = customerFileEntry.getGridPositions();
+//            String[] movements = explodeMovements(gridPositions);
+//            movementsByCustomer.put(customerFileEntry, movements);
+//        }
+//
+//        List<Multimap<Coordinate, CustomerFileEntry>> movementsByCoordinates = new ArrayList<>();
+//        boolean shouldLookupTurn = true;
+//        int currentTurn = -1;
+//        Set<Map.Entry<CustomerFileEntry, String[]>> movementsByCustomerEntries = movementsByCustomer.entrySet();
+//        while (shouldLookupTurn){
+//            currentTurn ++;
+//            Multimap<Coordinate, CustomerFileEntry> movementsThisTurn = ArrayListMultimap.create();
+//            shouldLookupTurn = false;
+//            for (Map.Entry<CustomerFileEntry, String[]> customerMovements : movementsByCustomerEntries) {
+//                String[] movements = customerMovements.getValue();
+//                if (currentTurn < movements.length) {
+//                    shouldLookupTurn = true;
+//                    String coordinatesForTurn = movements[currentTurn];
+//                    movementsThisTurn.put(new Coordinate(1, 1), customerMovements.getKey());
+//                }
+//            }
+//            movementsByCoordinates.add(movementsThisTurn);
+//        }
+//
+//        Map<Coordinate, Map<Integer, CustomerFileEntry>> customerInteractionsByCoordinates = new HashMap<>();
+//        int currentTurnCounter = 0;
+//        for (Multimap<Coordinate, CustomerFileEntry> movementsThisTurn : movementsByCoordinates) {
+//            currentTurnCounter ++;
+//            Map<Coordinate, Collection<CustomerFileEntry>> coordinateCollectionMap = movementsThisTurn.asMap();
+//            for (Map.Entry<Coordinate, Collection<CustomerFileEntry>> coordinateCollectionEntry : coordinateCollectionMap.entrySet()) {
+//                Map<Integer, CustomerFileEntry> customerInteractions;
+//                customerInteractionsByCoordinates.put(coordinateCollectionEntry.getKey(), null);
+//            }
+//        }
 
 
         //noinspection InfiniteLoopStatement

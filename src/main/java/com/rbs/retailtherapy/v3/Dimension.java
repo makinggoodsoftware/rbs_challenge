@@ -47,4 +47,12 @@ public class Dimension {
     public int hashCode() {
         return Objects.hashCode(cols, rows);
     }
+
+    public Coordinate topLeft() {
+        return new Coordinate(0, rows - 1);
+    }
+
+    public Coordinate bottomRight() {
+        return new Coordinate(cols -1, 0);
+    }
 }
