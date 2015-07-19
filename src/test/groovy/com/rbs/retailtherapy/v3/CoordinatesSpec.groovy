@@ -1,7 +1,7 @@
 package com.rbs.retailtherapy.v3
 
-import com.rbs.retailtherapy.v3.domain.Coordinate
-import com.rbs.retailtherapy.v3.logic.coordinates.Coordinates
+import com.rbs.retailtherapy.domain.Coordinate
+import com.rbs.retailtherapy.logic.coordinates.Coordinates
 import spock.lang.Specification
 
 class CoordinatesSpec extends Specification {

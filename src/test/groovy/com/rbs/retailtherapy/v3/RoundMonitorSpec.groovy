@@ -1,11 +1,11 @@
 package com.rbs.retailtherapy.v3
 
 import com.rbs.retailtherapy.entity.RoundStateResponse
-import com.rbs.retailtherapy.v3.domain.BidStatus
-import com.rbs.retailtherapy.v3.domain.RoundState
-import com.rbs.retailtherapy.v3.logic.clock.RoundMonitor
-import com.rbs.retailtherapy.v3.logic.manager.RoundManager
-import com.rbs.retailtherapy.v3.logic.manager.RoundStateFactory
+import com.rbs.retailtherapy.domain.BidStatus
+import com.rbs.retailtherapy.domain.RoundState
+import com.rbs.retailtherapy.logic.clock.RoundMonitor
+import com.rbs.retailtherapy.logic.manager.RoundManager
+import com.rbs.retailtherapy.logic.manager.RoundStateFactory
 import spock.lang.Specification
 
 class RoundMonitorSpec extends Specification {
@@ -18,7 +18,7 @@ class RoundMonitorSpec extends Specification {
     RoundManager roundManagerMock = Mock (RoundManager)
 
     def "setup" (){
-        testObj = new RoundMonitor(roundStateFactoryMock, roundManagerMock)
+        testObj = new RoundMonitor(roundManagerMock)
     }
 
     def "if game is not opened" (){

@@ -1,6 +1,6 @@
 package com.rbs.retailtherapy.client;
 
-import com.rbs.retailtherapy.v2.domain.CustomerFileEntry;
+import com.rbs.retailtherapy.domain.CustomerFileEntry;
 
 import java.util.List;
 

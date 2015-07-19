@@ -1,10 +1,10 @@
 package com.rbs.retailtherapy.v3
 
 import com.rbs.retailtherapy.entity.RoundStateResponse
-import com.rbs.retailtherapy.v3.domain.GameState
-import com.rbs.retailtherapy.v3.logic.clock.RoundMonitor
-import com.rbs.retailtherapy.v3.logic.clock.RoundProvider
-import com.rbs.retailtherapy.v3.logic.manager.GameManager
+import com.rbs.retailtherapy.domain.GameState
+import com.rbs.retailtherapy.logic.clock.RoundMonitor
+import com.rbs.retailtherapy.logic.clock.RoundProvider
+import com.rbs.retailtherapy.logic.manager.GameManager
 import spock.lang.Specification
 
 class RoundProviderSpec extends Specification {
