@@ -24,6 +24,12 @@ public class RoundMonitor {
         if (currentState.getBidStatus() == BidStatus.BID_SENT){
             return roundManager.onWaitingBids (currentState, expectedCurrentState);
         }
+        if (currentState.getBidStatus() == BidStatus.BID_COMPLETE && ! currentState.getIsTradeOpen()){
+            return roundManager.waitingForTradeToOpen (currentState, expectedCurrentState);
+        }
+        if (currentState.getIsTradeOpen()){
+
+        }
         return currentState;
     }
 

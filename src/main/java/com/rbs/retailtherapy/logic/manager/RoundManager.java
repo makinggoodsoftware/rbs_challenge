@@ -73,10 +73,19 @@ public class RoundManager {
             }
         }
         afterWaiting.setShopsBidCoordinates(thisShopBids);
+        afterWaiting.setMyShops(adjudicatedShopBids);
+        afterWaiting.setStolenShops(stolenShopBids);
+        if (afterWaiting.getShopsBidCoordinates().size() == 0) {
+            afterWaiting.setBidStatus(BidStatus.BID_COMPLETE);
+        }
         return afterWaiting;
     }
 
     public HttpGameSession getHttpSession() {
         return httpGameSession;
+    }
+
+    public RoundState waitingForTradeToOpen(RoundState currentState, RoundState expectedCurrentState) {
+        return expectedCurrentState;
     }
 }

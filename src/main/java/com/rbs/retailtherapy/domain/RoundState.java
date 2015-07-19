@@ -18,6 +18,8 @@ public class RoundState {
     private BidStatus bidStatus;
     private RoundStateEnum roundState;
     private Set<Coordinate> shopsBidCoordinates;
+    private Set<Coordinate> myShops;
+    private Set<Coordinate> stolenShops;
 
     public RoundState(boolean isBiddingOpen, boolean isTradeOpen, int numberOfShoppers, List<Stock> stocks, Dimension dimension, double initialMoney, Grid grid, BidStatus bidStatus, RoundStateEnum roundState, Set<Coordinate> shopsBidCoordinates) {
         this.isBiddingOpen = isBiddingOpen;
@@ -78,5 +80,13 @@ public class RoundState {
 
     public Grid getGrid() {
         return grid;
+    }
+
+    public void setMyShops(Set<Coordinate> myShops) {
+        this.myShops = myShops;
+    }
+
+    public void setStolenShops(Set<Coordinate> stolenShops) {
+        this.stolenShops = stolenShops;
     }
 }
