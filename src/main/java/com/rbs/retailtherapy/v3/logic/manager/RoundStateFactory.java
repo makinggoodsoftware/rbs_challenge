@@ -35,7 +35,7 @@ public class RoundStateFactory {
                 expectedState.getStocks(),
                 expectedState.getDimension(),
                 newState.getRoundParameters().getInitialBatcoins(),
-                BidStatus.NOT_BID
+                expectedState.getBidStatus()
         );
     }
 
