@@ -1,8 +1,10 @@
 package com.rbs.retailtherapy.domain;
 
+import com.rbs.retailtherapy.model.RoundStateEnum;
 import com.rbs.retailtherapy.model.Stock;
 
 import java.util.List;
+import java.util.Set;
 
 public class RoundState {
     private final boolean isBiddingOpen;
@@ -11,17 +13,23 @@ public class RoundState {
     private final List<Stock> stocks;
     private final Dimension dimension;
     private final double initialMoney;
+    private final Grid grid;
 
     private BidStatus bidStatus;
+    private RoundStateEnum roundState;
+    private Set<Coordinate> shopsBidCoordinates;
 
-    public RoundState(boolean isBiddingOpen, boolean isTradeOpen, int numberOfShoppers, List<Stock> stocks, Dimension dimension, double initialMoney, BidStatus bidStatus) {
+    public RoundState(boolean isBiddingOpen, boolean isTradeOpen, int numberOfShoppers, List<Stock> stocks, Dimension dimension, double initialMoney, Grid grid, BidStatus bidStatus, RoundStateEnum roundState, Set<Coordinate> shopsBidCoordinates) {
         this.isBiddingOpen = isBiddingOpen;
         this.isTradeOpen = isTradeOpen;
         this.numberOfShoppers = numberOfShoppers;
         this.stocks = stocks;
         this.dimension = dimension;
         this.initialMoney = initialMoney;
+        this.grid = grid;
         this.bidStatus = bidStatus;
+        this.roundState = roundState;
+        this.shopsBidCoordinates = shopsBidCoordinates;
     }
 
     public boolean getIsBiddingOpen() {
@@ -54,5 +62,21 @@ public class RoundState {
 
     public void setBidStatus(BidStatus bidStatus) {
         this.bidStatus = bidStatus;
+    }
+
+    public RoundStateEnum getRoundState() {
+        return roundState;
+    }
+
+    public Set<Coordinate> getShopsBidCoordinates() {
+        return shopsBidCoordinates;
+    }
+
+    public void setShopsBidCoordinates(Set<Coordinate> shopsBidCoordinates) {
+        this.shopsBidCoordinates = shopsBidCoordinates;
+    }
+
+    public Grid getGrid() {
+        return grid;
     }
 }

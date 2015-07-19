@@ -6,6 +6,8 @@ import com.rbs.retailtherapy.domain.Dimension;
 import java.util.Set;
 
 public interface CoordinatesSelector {
+    Set<Coordinate> allCoordinates(Dimension dimension);
+
     Set<Coordinate> outterRingCoordinates(Dimension dimension);
 
     Integer right(Dimension dimension);

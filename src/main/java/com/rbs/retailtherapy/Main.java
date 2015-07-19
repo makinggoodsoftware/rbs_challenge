@@ -11,6 +11,7 @@ import com.rbs.retailtherapy.logic.clock.RoundProvider;
 import com.rbs.retailtherapy.logic.coordinates.Coordinates;
 import com.rbs.retailtherapy.logic.coordinates.CoordinatesSelectors;
 import com.rbs.retailtherapy.logic.manager.GameManager;
+import com.rbs.retailtherapy.logic.manager.GridFactory;
 import com.rbs.retailtherapy.logic.manager.RoundStateFactory;
 import com.rbs.retailtherapy.logic.meta.CustomersLoader;
 import com.rbs.retailtherapy.logic.strategy.*;
@@ -32,7 +33,8 @@ public class Main {
 
         GameState gameState = new GameState(maximumToInvest);
         HttpGameClient httpGameClient = new HttpGameClient(baseUrl);
-        RoundStateFactory roundStateFactory = new RoundStateFactory(httpGameClient);
+        GridFactory gridFactory = new GridFactory();
+        RoundStateFactory roundStateFactory = new RoundStateFactory(httpGameClient, gridFactory);
         Investor investor = new Investor();
         Coordinates coordinates = new Coordinates();
         CoordinatesSelectors coordinatesSelectors = new CoordinatesSelectors();
@@ -42,7 +44,7 @@ public class Main {
         ShopBidder shopBidder = new ShopBidder(investor, potentialShopCellDistributor, strategizer, coordinates);
         Gson gson = new GsonBuilder().create();
         CustomersLoader customersLoader = new CustomersLoader(gson);
-        GameManager gameManger = new GameManager(gameState, roundStateFactory, httpGameClient, shopBidder, customersLoader, userName, password, customersFileName);
+        GameManager gameManger = new GameManager(gameState, httpGameClient, shopBidder, customersLoader, roundStateFactory, coordinatesSelectors, userName, password, customersFileName);
         RoundProvider roundProvider = new RoundProvider(gameManger, gameState);
 
         new GameClock(roundProvider, httpGameClient, roundStateFactory).start();

@@ -1,9 +1,15 @@
 package com.rbs.retailtherapy.logic.clock;
 
+import com.rbs.retailtherapy.client.HttpGameSession;
+import com.rbs.retailtherapy.domain.Coordinate;
 import com.rbs.retailtherapy.entity.RoundStateResponse;
+import com.rbs.retailtherapy.entity.ShopResponse;
 import com.rbs.retailtherapy.impl.HttpGameClient;
 import com.rbs.retailtherapy.domain.RoundState;
 import com.rbs.retailtherapy.logic.manager.RoundStateFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameClock {
     private final RoundProvider roundProvider;
@@ -18,7 +24,7 @@ public class GameClock {
 
     public void start() {
         RoundState expectedState = null;
-        while(true){
+        while (true) {
             expectedState = tick(expectedState);
         }
     }
@@ -27,11 +33,25 @@ public class GameClock {
         try {
             RoundStateResponse roundStateResponse = httpGameClient.getRoundState();
             RoundMonitor roundMonitor = roundProvider.retrieve(roundStateResponse);
-            RoundState currentState = roundStateFactory.from(roundStateResponse, expectedState);
+            HttpGameSession httpGameSession = roundMonitor.getHttpSession();
+            ShopResponse[] shops = httpGameSession.getSelfState().getShops();
+            RoundState currentState = roundStateFactory.merge(roundStateResponse, expectedState, parseShops(shops));
             return roundMonitor.tick(currentState, expectedState);
         } catch (Exception e) {
             e.printStackTrace();
             return expectedState;
         }
+    }
+
+    private Map<Coordinate, ShopResponse> parseShops(ShopResponse[] shops) {
+        if (shops == null) return new HashMap<>();
+        Map<Coordinate, ShopResponse> parsedShops = new HashMap<>();
+        for (ShopResponse shop : shops) {
+            parsedShops.put(
+                    new Coordinate(shop.getPosition().getCol(), shop.getPosition().getRow()),
+                    shop
+            );
+        }
+        return parsedShops;
     }
 }

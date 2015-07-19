@@ -1,5 +1,6 @@
 package com.rbs.retailtherapy.logic.clock;
 
+import com.rbs.retailtherapy.client.HttpGameSession;
 import com.rbs.retailtherapy.domain.BidStatus;
 import com.rbs.retailtherapy.domain.RoundState;
 import com.rbs.retailtherapy.logic.manager.RoundManager;
@@ -14,9 +15,19 @@ public class RoundMonitor {
 
 
     public RoundState tick(RoundState currentState, RoundState expectedCurrentState) {
+        if (expectedCurrentState == null){
+            roundManager.onNewGame (currentState);
+        }
         if (currentState.getIsBiddingOpen() && currentState.getBidStatus() == BidStatus.NOT_BID){
             return roundManager.onBiddingOpened (currentState);
         }
+        if (currentState.getBidStatus() == BidStatus.BID_SENT){
+            return roundManager.onWaitingBids (currentState, expectedCurrentState);
+        }
         return currentState;
+    }
+
+    public HttpGameSession getHttpSession() {
+        return roundManager.getHttpSession ();
     }
 }

@@ -9,6 +9,16 @@ import java.util.Set;
 
 public abstract class BaseFilteredCoordinatesSelector implements CoordinatesSelector {
     @Override
+    public Set<Coordinate> allCoordinates(Dimension dimension) {
+        Set<Coordinate> all = new HashSet<>();
+        Integer top = top(dimension);
+        for (int i = 0; i <= top; i++){
+            all.addAll(horizontalLine(dimension, i));
+        }
+        return all;
+    }
+
+    @Override
     public Set<Coordinate> outterRingCoordinates(Dimension dimension){
         Set<Coordinate> ring = new HashSet<>();
         ring.addAll(horizontalLine(dimension, top(dimension)));

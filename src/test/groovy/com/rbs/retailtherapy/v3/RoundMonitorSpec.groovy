@@ -21,25 +21,10 @@ class RoundMonitorSpec extends Specification {
         testObj = new RoundMonitor(roundManagerMock)
     }
 
-    def "if game is not opened" (){
-        given:
-        roundStateFactoryMock.from (httpStateMock, null) >> roundStateMock
-        roundStateMock.isBiddingOpen >> false
-        roundStateMock.isTradeOpen >> false
-        roundStateMock.bidStatus >> BidStatus.NOT_BID
-
-        when:
-        RoundState result = testObj.tick(httpStateMock, null)
-
-        then:
-        1 * roundManagerMock.onWaitingForGameToStart(roundStateMock) >> processedRound
-        result.is(processedRound)
-    }
-
 
     def "if never bade for shops previously, bidding is open, and trading is closed, bid only" (){
         given:
-        roundStateFactoryMock.from (httpStateMock, null) >> roundStateMock
+        roundStateFactoryMock.merge(httpStateMock, null, myShops) >> roundStateMock
         roundStateMock.isBiddingOpen() >> true
         roundStateMock.isTradeOpen() >> false
         roundStateMock.bidStatus >> BidStatus.NOT_BID
@@ -54,7 +39,7 @@ class RoundMonitorSpec extends Specification {
 
     def "if waiting for bids, and all the bids are inconclusive, wait" (){
         given:
-        roundStateFactoryMock.from (httpStateMock, previousRoundStateMock) >> roundStateMock
+        roundStateFactoryMock.merge(httpStateMock, previousRoundStateMock, myShops) >> roundStateMock
         roundStateMock.isBiddingOpen() >> true
         roundStateMock.isTradeOpen() >> false
         roundStateMock.bidStatus >> BidStatus.BID_SENT
@@ -69,7 +54,7 @@ class RoundMonitorSpec extends Specification {
 
     def "if waiting for bids, and all the bids are completed, notify" (){
         given:
-        roundStateFactoryMock.from (httpStateMock, previousRoundStateMock) >> roundStateMock
+        roundStateFactoryMock.merge(httpStateMock, previousRoundStateMock, myShops) >> roundStateMock
         roundStateMock.isBiddingOpen() >> true
         roundStateMock.isTradeOpen() >> false
         roundStateMock.bidStatus >> BidStatus.BID_COMPLETE
@@ -84,7 +69,7 @@ class RoundMonitorSpec extends Specification {
 
     def "if trading is opened, cotinue trading" (){
         given:
-        roundStateFactoryMock.from (httpStateMock, previousRoundStateMock) >> roundStateMock
+        roundStateFactoryMock.merge(httpStateMock, previousRoundStateMock, myShops) >> roundStateMock
         roundStateMock.isBiddingOpen() >> true
         roundStateMock.isTradeOpen() >> true
         roundStateMock.bidStatus >> BidStatus.BID_COMPLETE
