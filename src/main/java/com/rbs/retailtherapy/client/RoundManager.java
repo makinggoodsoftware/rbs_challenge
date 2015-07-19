@@ -2,6 +2,7 @@ package com.rbs.retailtherapy.client;
 
 import com.rbs.retailtherapy.entity.RequestShopResponse;
 import com.rbs.retailtherapy.entity.RoundStateResponse;
+import com.rbs.retailtherapy.v3.client.HttpGameSession;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

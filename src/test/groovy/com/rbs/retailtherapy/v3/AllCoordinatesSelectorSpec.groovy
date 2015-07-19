@@ -1,5 +1,8 @@
 package com.rbs.retailtherapy.v3
 
+import com.rbs.retailtherapy.v3.domain.Coordinate
+import com.rbs.retailtherapy.v3.domain.Dimension
+import com.rbs.retailtherapy.v3.logic.coordinates.selector.AllFilteredCoordinatesSelector
 import spock.lang.Specification
 
 class AllCoordinatesSelectorSpec extends Specification {

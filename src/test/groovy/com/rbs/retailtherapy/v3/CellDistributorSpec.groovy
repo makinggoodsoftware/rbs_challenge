@@ -1,5 +1,10 @@
 package com.rbs.retailtherapy.v3
 
+import com.rbs.retailtherapy.v3.domain.Coordinate
+import com.rbs.retailtherapy.v3.domain.Dimension
+import com.rbs.retailtherapy.v3.logic.coordinates.Coordinates
+import com.rbs.retailtherapy.v3.logic.coordinates.CoordinatesSelectors
+import com.rbs.retailtherapy.v3.logic.strategy.CellDistributor
 import spock.lang.Specification
 
 class CellDistributorSpec extends Specification {

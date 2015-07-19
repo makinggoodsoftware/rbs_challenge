@@ -1,6 +1,8 @@
 package com.rbs.retailtherapy.v3
 
 import com.rbs.retailtherapy.model.Stock
+import com.rbs.retailtherapy.v3.domain.Customer
+import com.rbs.retailtherapy.v3.logic.strategy.FinanceService
 import spock.lang.Specification
 
 class FinanceServiceSpec extends Specification {

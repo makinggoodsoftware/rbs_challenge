@@ -4,6 +4,7 @@ import com.rbs.retailtherapy.entity.JoinGameResponse;
 import com.rbs.retailtherapy.entity.RoundStateResponse;
 import com.rbs.retailtherapy.impl.HttpGameClient;
 import com.rbs.retailtherapy.model.ParticipantParameters;
+import com.rbs.retailtherapy.v3.client.HttpGameSession;
 
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;

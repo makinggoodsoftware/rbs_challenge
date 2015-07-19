@@ -1,7 +1,7 @@
 package com.rbs.retailtherapy.v2.ai;
 
 import com.rbs.retailtherapy.v2.domain.Coordinate;
-import com.rbs.retailtherapy.v3.Customer;
+import com.rbs.retailtherapy.v3.domain.Customer;
 import com.rbs.retailtherapy.v2.domain.GameState;
 import com.rbs.retailtherapy.v2.domain.Grid;
 import com.rbs.retailtherapy.v2.service.GridService;

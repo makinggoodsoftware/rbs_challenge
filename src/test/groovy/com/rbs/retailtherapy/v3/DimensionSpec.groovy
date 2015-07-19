@@ -1,5 +1,6 @@
 package com.rbs.retailtherapy.v3
 
+import com.rbs.retailtherapy.v3.domain.Dimension
 import spock.lang.Specification
 
 class DimensionSpec extends Specification {

@@ -1,11 +1,17 @@
 package com.rbs.retailtherapy.v3
 
+import com.rbs.retailtherapy.v3.domain.Dimension
+import com.rbs.retailtherapy.v3.domain.FixedSpacingInvestmentConfiguration
+import com.rbs.retailtherapy.v3.domain.Investment
+import com.rbs.retailtherapy.v3.domain.InvestmentConfiguration
+import com.rbs.retailtherapy.v3.domain.PlacementType
+import com.rbs.retailtherapy.v3.logic.strategy.Investor
 import spock.lang.Specification
 
-import static PlacementType.OUTTER_1st_LOOP
-import static PlacementType.OUTTER_2nd_LOOP
-import static PlacementType.OUTTER_3rd_LOOP
-import static com.rbs.retailtherapy.v3.PlacementType.CENTER
+import static com.rbs.retailtherapy.v3.domain.PlacementType.OUTTER_1st_LOOP
+import static com.rbs.retailtherapy.v3.domain.PlacementType.OUTTER_2nd_LOOP
+import static com.rbs.retailtherapy.v3.domain.PlacementType.OUTTER_3rd_LOOP
+import static com.rbs.retailtherapy.v3.domain.PlacementType.CENTER
 
 class InvestorSpec extends Specification {
     Investor investor = new Investor()

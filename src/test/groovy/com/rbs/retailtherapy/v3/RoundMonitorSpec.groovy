@@ -1,6 +1,11 @@
 package com.rbs.retailtherapy.v3
 
 import com.rbs.retailtherapy.entity.RoundStateResponse
+import com.rbs.retailtherapy.v3.domain.BidStatus
+import com.rbs.retailtherapy.v3.domain.RoundState
+import com.rbs.retailtherapy.v3.logic.clock.RoundMonitor
+import com.rbs.retailtherapy.v3.logic.manager.RoundManager
+import com.rbs.retailtherapy.v3.logic.manager.RoundStateFactory
 import spock.lang.Specification
 
 class RoundMonitorSpec extends Specification {
@@ -11,17 +16,16 @@ class RoundMonitorSpec extends Specification {
     RoundStateFactory roundStateFactoryMock = Mock (RoundStateFactory)
     RoundStateResponse httpStateMock = Mock(RoundStateResponse)
     RoundManager roundManagerMock = Mock (RoundManager)
-    Bid bid1Mock = Mock (Bid)
 
     def "setup" (){
-        testObj = new RoundMonitor (roundStateFactoryMock, roundManagerMock)
+        testObj = new RoundMonitor(roundStateFactoryMock, roundManagerMock)
     }
 
     def "if game is not opened" (){
         given:
         roundStateFactoryMock.from (httpStateMock, null) >> roundStateMock
-        roundStateMock.isBiddingOpen() >> false
-        roundStateMock.isTradeOpen() >> false
+        roundStateMock.isBiddingOpen >> false
+        roundStateMock.isTradeOpen >> false
         roundStateMock.bidStatus >> BidStatus.NOT_BID
 
         when:
