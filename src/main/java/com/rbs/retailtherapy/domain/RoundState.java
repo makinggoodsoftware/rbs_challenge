@@ -1,9 +1,11 @@
 package com.rbs.retailtherapy.domain;
 
+import com.rbs.retailtherapy.entity.ShopperResponse;
 import com.rbs.retailtherapy.model.RoundStateEnum;
 import com.rbs.retailtherapy.model.Stock;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class RoundState {
@@ -14,6 +16,7 @@ public class RoundState {
     private final Dimension dimension;
     private final double initialMoney;
     private final Grid grid;
+    private final Map<Coordinate, ShopperResponse> shoppers;
 
     private BidStatus bidStatus;
     private RoundStateEnum roundState;
@@ -21,7 +24,7 @@ public class RoundState {
     private Set<Coordinate> myShops;
     private Set<Coordinate> stolenShops;
 
-    public RoundState(boolean isBiddingOpen, boolean isTradeOpen, int numberOfShoppers, List<Stock> stocks, Dimension dimension, double initialMoney, Grid grid, BidStatus bidStatus, RoundStateEnum roundState, Set<Coordinate> shopsBidCoordinates) {
+    public RoundState(boolean isBiddingOpen, boolean isTradeOpen, int numberOfShoppers, List<Stock> stocks, Dimension dimension, double initialMoney, Grid grid, Map<Coordinate, ShopperResponse> shoppers, BidStatus bidStatus, RoundStateEnum roundState, Set<Coordinate> shopsBidCoordinates) {
         this.isBiddingOpen = isBiddingOpen;
         this.isTradeOpen = isTradeOpen;
         this.numberOfShoppers = numberOfShoppers;
@@ -29,6 +32,7 @@ public class RoundState {
         this.dimension = dimension;
         this.initialMoney = initialMoney;
         this.grid = grid;
+        this.shoppers = shoppers;
         this.bidStatus = bidStatus;
         this.roundState = roundState;
         this.shopsBidCoordinates = shopsBidCoordinates;
@@ -88,5 +92,9 @@ public class RoundState {
 
     public void setStolenShops(Set<Coordinate> stolenShops) {
         this.stolenShops = stolenShops;
+    }
+
+    public Map<Coordinate, ShopperResponse> getShoppers() {
+        return shoppers;
     }
 }

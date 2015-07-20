@@ -13,33 +13,30 @@ import java.util.Map;
 
 public class GameClock {
     private final RoundProvider roundProvider;
-    private final ParticipantImpl ParticipantImpl;
+    private final ParticipantImpl httpGameClient;
     private final RoundStateFactory roundStateFactory;
 
-    public GameClock(RoundProvider roundProvider, ParticipantImpl ParticipantImpl, RoundStateFactory roundStateFactory) {
+    public GameClock(RoundProvider roundProvider, ParticipantImpl httpGameClient, RoundStateFactory roundStateFactory) {
         this.roundProvider = roundProvider;
-        this.ParticipantImpl = ParticipantImpl;
+        this.httpGameClient = httpGameClient;
         this.roundStateFactory = roundStateFactory;
     }
 
     public void start() {
         RoundState expectedState = null;
+        RoundState previousState = null;
         while (true) {
-            expectedState = tick(expectedState);
-        }
-    }
-
-    private RoundState tick(RoundState expectedState) {
-        try {
-            RoundStateResponse roundStateResponse = ParticipantImpl.getRoundState();
-            RoundMonitor roundMonitor = roundProvider.retrieve(roundStateResponse);
-            HttpGameSession httpSession = roundMonitor.getHttpSession();
-            ShopResponse[] shops = httpSession.getSelfState().getShops();
-            RoundState currentState = roundStateFactory.merge(roundStateResponse, expectedState, parseShops(shops));
-            return roundMonitor.tick(currentState, expectedState);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return expectedState;
+            try {
+                RoundStateResponse roundStateResponse = httpGameClient.getRoundState();
+                RoundMonitor roundMonitor = roundProvider.retrieve(roundStateResponse);
+                HttpGameSession httpGameSession = roundMonitor.getHttpSession();
+                ShopResponse[] shops = httpGameSession.getSelfState().getShops();
+                RoundState currentState = roundStateFactory.merge(roundStateResponse, expectedState, parseShops(shops));
+                expectedState = roundMonitor.tick(previousState, currentState, expectedState);
+                previousState = currentState;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -14,9 +14,9 @@ public class RoundMonitor {
 
 
 
-    public RoundState tick(RoundState currentState, RoundState expectedCurrentState) {
+    public RoundState tick(RoundState previousState, RoundState currentState, RoundState expectedCurrentState) {
         if (expectedCurrentState == null){
-            roundManager.onNewGame (currentState);
+            roundManager.onNewRound(currentState);
         }
         if (currentState.getIsBiddingOpen() && currentState.getBidStatus() == BidStatus.NOT_BID){
             return roundManager.onBiddingOpened (currentState);
@@ -25,10 +25,16 @@ public class RoundMonitor {
             return roundManager.onWaitingBids (currentState, expectedCurrentState);
         }
         if (currentState.getBidStatus() == BidStatus.BID_COMPLETE && ! currentState.getIsTradeOpen()){
-            return roundManager.waitingForTradeToOpen (currentState, expectedCurrentState);
+            return roundManager.waitingForTradeToOpen (expectedCurrentState);
         }
         if (currentState.getIsTradeOpen()){
-
+            if (! previousState.getIsTradeOpen()) {
+                return roundManager.onFirstTradingStep (currentState);
+            } else {
+                if (! previousState.getShoppers().keySet().equals(currentState.getShoppers().keySet())) {
+                    return roundManager.onTradingStep (currentState);
+                }
+            }
         }
         return currentState;
     }

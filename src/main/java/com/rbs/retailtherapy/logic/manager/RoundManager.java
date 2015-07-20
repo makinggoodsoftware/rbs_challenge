@@ -3,12 +3,14 @@ package com.rbs.retailtherapy.logic.manager;
 import com.rbs.retailtherapy.impl.HttpGameSession;
 import com.rbs.retailtherapy.domain.*;
 import com.rbs.retailtherapy.entity.RequestShopResponse;
+import com.rbs.retailtherapy.entity.ShopperResponse;
 import com.rbs.retailtherapy.logic.coordinates.CoordinatesSelectors;
 import com.rbs.retailtherapy.logic.strategy.ShopBidder;
 import com.rbs.retailtherapy.model.CellStatus;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class RoundManager {
@@ -26,8 +28,7 @@ public class RoundManager {
         this.coordinatesSelectors = coordinatesSelectors;
     }
 
-    public void onNewGame(RoundState currentState) {
-        System.out.println("NEW GAME");
+    public void onNewRound(RoundState currentState) {
         System.out.println("Round state " + currentState.getRoundState ());
     }
 
@@ -85,7 +86,24 @@ public class RoundManager {
         return httpGameSession;
     }
 
-    public RoundState waitingForTradeToOpen(RoundState currentState, RoundState expectedCurrentState) {
+    public RoundState waitingForTradeToOpen(RoundState expectedCurrentState) {
         return expectedCurrentState;
+    }
+
+    public RoundState onFirstTradingStep(RoundState currentState) {
+        System.out.println("TRADING JUST OPENED");
+        return trackShoppers(currentState);
+    }
+
+    public RoundState onTradingStep(RoundState currentState) {
+        return trackShoppers(currentState);
+    }
+
+    private RoundState trackShoppers(RoundState currentState) {
+        Map<Coordinate, ShopperResponse> shoppers = currentState.getShoppers();
+        for (Map.Entry<Coordinate, ShopperResponse> coordinateShopperResponseEntry : shoppers.entrySet()) {
+            System.out.println("Shopper in: " + coordinateShopperResponseEntry.getKey());
+        }
+        return currentState;
     }
 }
