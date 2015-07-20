@@ -2,10 +2,11 @@ package com.rbs.retailtherapy;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.rbs.retailtherapy.client.HttpGameSession;
 import com.rbs.retailtherapy.domain.FixedSpacingInvestmentConfiguration;
 import com.rbs.retailtherapy.domain.GameState;
 import com.rbs.retailtherapy.domain.InvestmentConfiguration;
-import com.rbs.retailtherapy.impl.HttpGameClient;
+import com.rbs.retailtherapy.impl.ParticipantImpl;
 import com.rbs.retailtherapy.logic.clock.GameClock;
 import com.rbs.retailtherapy.logic.clock.RoundProvider;
 import com.rbs.retailtherapy.logic.coordinates.Coordinates;
@@ -32,9 +33,9 @@ public class Main {
         );
 
         GameState gameState = new GameState(maximumToInvest);
-        HttpGameClient httpGameClient = new HttpGameClient(baseUrl);
+        ParticipantImpl participantImpl = new ParticipantImpl(baseUrl);
         GridFactory gridFactory = new GridFactory();
-        RoundStateFactory roundStateFactory = new RoundStateFactory(httpGameClient, gridFactory);
+        RoundStateFactory roundStateFactory = new RoundStateFactory(participantImpl, gridFactory);
         Investor investor = new Investor();
         Coordinates coordinates = new Coordinates();
         CoordinatesSelectors coordinatesSelectors = new CoordinatesSelectors();
@@ -44,9 +45,9 @@ public class Main {
         ShopBidder shopBidder = new ShopBidder(investor, potentialShopCellDistributor, strategizer, coordinates);
         Gson gson = new GsonBuilder().create();
         CustomersLoader customersLoader = new CustomersLoader(gson);
-        GameManager gameManger = new GameManager(gameState, httpGameClient, shopBidder, customersLoader, roundStateFactory, coordinatesSelectors, userName, password, customersFileName);
+        GameManager gameManger = new GameManager(gameState, participantImpl, shopBidder, customersLoader, roundStateFactory, coordinatesSelectors, userName, password, customersFileName);
         RoundProvider roundProvider = new RoundProvider(gameManger, gameState);
 
-        new GameClock(roundProvider, httpGameClient, roundStateFactory).start();
+        new GameClock(roundProvider, participantImpl, roundStateFactory).start();
     }
 }

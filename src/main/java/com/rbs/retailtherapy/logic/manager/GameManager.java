@@ -1,19 +1,19 @@
 package com.rbs.retailtherapy.logic.manager;
 
-import com.rbs.retailtherapy.entity.JoinGameResponse;
-import com.rbs.retailtherapy.entity.RoundStateResponse;
-import com.rbs.retailtherapy.impl.HttpGameClient;
-import com.rbs.retailtherapy.logic.coordinates.CoordinatesSelectors;
-import com.rbs.retailtherapy.model.ParticipantParameters;
 import com.rbs.retailtherapy.client.HttpGameSession;
 import com.rbs.retailtherapy.domain.GameState;
+import com.rbs.retailtherapy.entity.JoinGameResponse;
+import com.rbs.retailtherapy.entity.RoundStateResponse;
+import com.rbs.retailtherapy.impl.ParticipantImpl;
 import com.rbs.retailtherapy.logic.clock.RoundMonitor;
+import com.rbs.retailtherapy.logic.coordinates.CoordinatesSelectors;
 import com.rbs.retailtherapy.logic.meta.CustomersLoader;
 import com.rbs.retailtherapy.logic.strategy.ShopBidder;
+import com.rbs.retailtherapy.model.ParticipantParameters;
 
 public class GameManager {
     private final GameState gameState;
-    private final HttpGameClient httpGameClient;
+    private final ParticipantImpl participantImpl;
     private final ShopBidder shopBidder;
     private final CustomersLoader customersLoader;
     private final String userName;
@@ -22,9 +22,9 @@ public class GameManager {
     private final RoundStateFactory roundStateFactory;
     private final CoordinatesSelectors coordinatesSelectors;
 
-    public GameManager(GameState gameState, HttpGameClient httpGameClient, ShopBidder shopBidder, CustomersLoader customersLoader, RoundStateFactory roundStateFactory, CoordinatesSelectors coordinatesSelectors, String userName, String password, String customersFileName) {
+    public GameManager(GameState gameState, ParticipantImpl participantImpl, ShopBidder shopBidder, CustomersLoader customersLoader, RoundStateFactory roundStateFactory, CoordinatesSelectors coordinatesSelectors, String userName, String password, String customersFileName) {
         this.gameState = gameState;
-        this.httpGameClient = httpGameClient;
+        this.participantImpl = participantImpl;
         this.shopBidder = shopBidder;
         this.customersLoader = customersLoader;
         this.coordinatesSelectors = coordinatesSelectors;
@@ -36,8 +36,8 @@ public class GameManager {
 
     public RoundMonitor onNewRound(RoundStateResponse roundStateResponse) {
         ParticipantParameters participantParameters = new ParticipantParameters(userName, password);
-        JoinGameResponse joinGameResponse = httpGameClient.joinGame(participantParameters);
-        HttpGameSession httpGameSession = new HttpGameSession(joinGameResponse.getParticipantId(), httpGameClient);
+        JoinGameResponse joinGameResponse = participantImpl.joinGame(participantParameters);
+        HttpGameSession httpGameSession = new HttpGameSession(joinGameResponse.getParticipantId(), participantImpl);
         RoundMonitor roundMonitor = new RoundMonitor(new RoundManager(httpGameSession, shopBidder, gameState, roundStateFactory, coordinatesSelectors));
         updateGameState (roundStateResponse);
         return roundMonitor;

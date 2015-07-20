@@ -1,7 +1,7 @@
 package com.rbs.retailtherapy.client;
 
 import com.rbs.retailtherapy.entity.*;
-import com.rbs.retailtherapy.impl.HttpGameClient;
+import com.rbs.retailtherapy.impl.ParticipantImpl;
 import com.rbs.retailtherapy.model.Direction;
 import com.rbs.retailtherapy.model.Stock;
 
@@ -13,9 +13,9 @@ public class HttpGameSession {
     private static final Logger LOGGER = Logger.getLogger(HttpGameSession.class.getSimpleName());
 
     private final int participantId;
-    private final HttpGameClient httpGameClient;
+    private final ParticipantImpl httpGameClient;
 
-    public HttpGameSession(int participantId, HttpGameClient httpGameClient) {
+    public HttpGameSession(int participantId, ParticipantImpl httpGameClient) {
         this.participantId = participantId;
         this.httpGameClient = httpGameClient;
     }

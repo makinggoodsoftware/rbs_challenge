@@ -2,10 +2,10 @@ package com.rbs.retailtherapy.logic.clock;
 
 import com.rbs.retailtherapy.client.HttpGameSession;
 import com.rbs.retailtherapy.domain.Coordinate;
+import com.rbs.retailtherapy.domain.RoundState;
 import com.rbs.retailtherapy.entity.RoundStateResponse;
 import com.rbs.retailtherapy.entity.ShopResponse;
-import com.rbs.retailtherapy.impl.HttpGameClient;
-import com.rbs.retailtherapy.domain.RoundState;
+import com.rbs.retailtherapy.impl.ParticipantImpl;
 import com.rbs.retailtherapy.logic.manager.RoundStateFactory;
 
 import java.util.HashMap;
@@ -13,12 +13,12 @@ import java.util.Map;
 
 public class GameClock {
     private final RoundProvider roundProvider;
-    private final HttpGameClient httpGameClient;
+    private final ParticipantImpl ParticipantImpl;
     private final RoundStateFactory roundStateFactory;
 
-    public GameClock(RoundProvider roundProvider, HttpGameClient httpGameClient, RoundStateFactory roundStateFactory) {
+    public GameClock(RoundProvider roundProvider, ParticipantImpl ParticipantImpl, RoundStateFactory roundStateFactory) {
         this.roundProvider = roundProvider;
-        this.httpGameClient = httpGameClient;
+        this.ParticipantImpl = ParticipantImpl;
         this.roundStateFactory = roundStateFactory;
     }
 
@@ -31,10 +31,10 @@ public class GameClock {
 
     private RoundState tick(RoundState expectedState) {
         try {
-            RoundStateResponse roundStateResponse = httpGameClient.getRoundState();
+            RoundStateResponse roundStateResponse = ParticipantImpl.getRoundState();
             RoundMonitor roundMonitor = roundProvider.retrieve(roundStateResponse);
-            HttpGameSession httpGameSession = roundMonitor.getHttpSession();
-            ShopResponse[] shops = httpGameSession.getSelfState().getShops();
+            HttpGameSession httpSession = roundMonitor.getHttpSession();
+            ShopResponse[] shops = httpSession.getSelfState().getShops();
             RoundState currentState = roundStateFactory.merge(roundStateResponse, expectedState, parseShops(shops));
             return roundMonitor.tick(currentState, expectedState);
         } catch (Exception e) {
