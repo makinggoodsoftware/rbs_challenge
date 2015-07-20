@@ -1,13 +1,39 @@
 package com.rbs.retailtherapy.logic.coordinates;
 
-import com.rbs.retailtherapy.domain.Coordinate;
-import com.rbs.retailtherapy.domain.Dimension;
-import com.rbs.retailtherapy.domain.PathType;
+import com.rbs.retailtherapy.domain.*;
 import com.rbs.retailtherapy.model.Position;
 
 import java.util.*;
 
 public class Coordinates {
+    public static Direction guessDirection(Coordinate initialCoordinate, Coordinate nextCoordinate) {
+        if (Objects.equals(initialCoordinate.getCol(), nextCoordinate.getCol())){
+            return Direction.VERTICAL;
+        }
+
+        if (Objects.equals(initialCoordinate.getRow(), nextCoordinate.getRow())){
+            return Direction.HORIZONTAL;
+        }
+
+        return Direction.DIAGONAL;
+    }
+
+    public static Orientation orientation(Direction lastDirection, List<Coordinate> coordinatesForDirection) {
+        if (coordinatesForDirection.size() == 1) return Orientation.NONE;
+        Coordinate from = coordinatesForDirection.get(0);
+        Coordinate to = coordinatesForDirection.get(1);
+        if (lastDirection == Direction.HORIZONTAL){
+            return to.getCol() > from.getCol() ? Orientation.EAST : Orientation.WEST;
+        } else if (lastDirection == Direction.VERTICAL) {
+            return to.getRow() > from.getRow() ? Orientation.NORTH : Orientation.SOUTH;
+        } else if (lastDirection == Direction.DIAGONAL) {
+            return to.getRow() > from.getRow() ?
+                    to.getCol() > from.getCol() ? Orientation.NORTH_EAST : Orientation.NORTH_WEST :
+                    to.getCol() > from.getCol() ? Orientation.SOUTH_EAST : Orientation.SOUTH_WEST;
+        }
+        throw new IllegalStateException();
+    }
+
     public List<Coordinate> sortSquare(Set<Coordinate> toSort, Coordinate topLeft, Coordinate bottomRight) {
         Coordinate topRight = new Coordinate(bottomRight.getCol(), topLeft.getRow());
         Coordinate bottomLeft = new Coordinate(topLeft.getCol(), bottomRight.getRow());
@@ -114,5 +140,9 @@ public class Coordinates {
 
     public Map<Coordinate, Coordinate> influenceArea(Dimension dimension, Set<Coordinate> from) {
         return null;
+    }
+
+    public static Coordinate from(Position currentPosision) {
+        return new Coordinate(currentPosision.getCol(), currentPosision.getRow());
     }
 }

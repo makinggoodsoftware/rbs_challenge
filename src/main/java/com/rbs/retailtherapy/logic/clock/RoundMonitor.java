@@ -29,10 +29,10 @@ public class RoundMonitor {
         }
         if (currentState.getIsTradeOpen()){
             if (! previousState.getIsTradeOpen()) {
-                return roundManager.onFirstTradingStep (currentState, expectedCurrentState);
+                return roundManager.onFirstTradingStep (currentState, previousState, expectedCurrentState);
             } else {
                 if (! previousState.getShoppers().keySet().equals(currentState.getShoppers().keySet())) {
-                    return roundManager.onTradingStep (currentState, expectedCurrentState);
+                    return roundManager.onTradingStep (currentState, previousState, expectedCurrentState);
                 }
             }
         }

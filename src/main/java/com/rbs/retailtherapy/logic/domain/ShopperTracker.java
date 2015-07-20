@@ -11,6 +11,7 @@ public class ShopperTracker {
     private final Position currentPosition;
     private final Map<Orientation, Coordinate> possibleMovements;
     private final ShopperResponse shopper;
+    private Orientation latestHint;
 
     public ShopperTracker(Position currentPosition, Map<Orientation, Coordinate> possibleMovements, ShopperResponse shopper) {
         this.currentPosition = currentPosition;
@@ -28,5 +29,13 @@ public class ShopperTracker {
 
     public ShopperResponse getShopper() {
         return shopper;
+    }
+
+    public void setLatestHint(Orientation latestHint) {
+        this.latestHint = latestHint;
+    }
+
+    public Orientation getLatestHint() {
+        return latestHint;
     }
 }

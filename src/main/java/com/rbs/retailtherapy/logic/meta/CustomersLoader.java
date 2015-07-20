@@ -2,6 +2,7 @@ package com.rbs.retailtherapy.logic.meta;
 
 import com.google.gson.Gson;
 import com.rbs.retailtherapy.domain.*;
+import com.rbs.retailtherapy.logic.coordinates.Coordinates;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -67,11 +68,11 @@ public class CustomersLoader {
         coordinatesForDirection.add(initialCoordinate);
         coordinatesForDirection.add(secondCoordinate);
 
-        Direction lastDirection = guessDirection(initialCoordinate, secondCoordinate);
+        Direction lastDirection = Coordinates.guessDirection(initialCoordinate, secondCoordinate);
         Coordinate previousCoordinate = secondCoordinate;
         for (int i = 2; i< coordinateList.size(); i++){
             Coordinate nextCoordinate = coordinateList.get(i);
-            Direction thisDirection = guessDirection(previousCoordinate, nextCoordinate);
+            Direction thisDirection = Coordinates.guessDirection(previousCoordinate, nextCoordinate);
             if (changesDirection(lastDirection, thisDirection)){
                 paths.add(createPath(lastDirection, coordinatesForDirection));
                 lastDirection = thisDirection;
@@ -85,7 +86,7 @@ public class CustomersLoader {
     }
 
     private Path createPath(Direction lastDirection, List<Coordinate> coordinatesForDirection) {
-        Orientation orientation = orientation(lastDirection, coordinatesForDirection);
+        Orientation orientation = Coordinates.orientation(lastDirection, coordinatesForDirection);
         boolean exhausted = exhausted(fromDimension, lastDirection, orientation, coordinatesForDirection);
         return new Path(lastDirection, orientation, coordinatesForDirection, exhausted);
     }
@@ -117,22 +118,6 @@ public class CustomersLoader {
         return false;
     }
 
-    private Orientation orientation(Direction lastDirection, List<Coordinate> coordinatesForDirection) {
-        if (coordinatesForDirection.size() == 1) return Orientation.NONE;
-        Coordinate from = coordinatesForDirection.get(0);
-        Coordinate to = coordinatesForDirection.get(1);
-        if (lastDirection == Direction.HORIZONTAL){
-            return to.getCol() > from.getCol() ? Orientation.EAST : Orientation.WEST;
-        } else if (lastDirection == Direction.VERTICAL) {
-            return to.getRow() > from.getRow() ? Orientation.NORTH : Orientation.SOUTH;
-        } else if (lastDirection == Direction.DIAGONAL) {
-            return to.getRow() > from.getRow() ?
-                    to.getCol() > from.getCol() ? Orientation.NORTH_EAST : Orientation.NORTH_WEST :
-                    to.getCol() > from.getCol() ? Orientation.SOUTH_EAST : Orientation.SOUTH_WEST;
-        }
-        throw new IllegalStateException();
-    }
-
     private boolean isLoop(Path initialPath, Path lastPath) {
         return initialPath.getCoordinates().get(0).equals(lastPath.getCoordinates().get(lastPath.getCoordinates().size() - 1));
     }
@@ -142,15 +127,4 @@ public class CustomersLoader {
 
     }
 
-    private Direction guessDirection(Coordinate initialCoordinate, Coordinate nextCoordinate) {
-        if (Objects.equals(initialCoordinate.getCol(), nextCoordinate.getCol())){
-            return Direction.VERTICAL;
-        }
-
-        if (Objects.equals(initialCoordinate.getRow(), nextCoordinate.getRow())){
-            return Direction.HORIZONTAL;
-        }
-
-        return Direction.DIAGONAL;
-    }
 }
