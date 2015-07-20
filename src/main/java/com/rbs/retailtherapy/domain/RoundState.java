@@ -22,6 +22,7 @@ public class RoundState {
     private final Multimap<Coordinate, ShopperResponse> shoppers;
     private final Map<Coordinate, ShopTracker> shops;
     private final SelfStateResponse selfStateResponse;
+    private final int currentStep;
 
     private BidStatus bidStatus;
     private RoundStateEnum roundState;
@@ -30,7 +31,7 @@ public class RoundState {
     private Set<Coordinate> stolenShops;
     private Map<Integer, ShopperTracker> userTracking = new HashMap<>();
 
-    public RoundState(boolean isBiddingOpen, boolean isTradeOpen, int numberOfShoppers, List<Stock> stocks, Dimension dimension, double initialMoney, Grid grid, Multimap<Coordinate, ShopperResponse> shoppers, Map<Integer, Customer> customers, BidStatus bidStatus, RoundStateEnum roundState, Set<Coordinate> shopsBidCoordinates, Map<Coordinate, ShopTracker> shops, SelfStateResponse selfStateResponse) {
+    public RoundState(boolean isBiddingOpen, boolean isTradeOpen, int numberOfShoppers, List<Stock> stocks, Dimension dimension, double initialMoney, Grid grid, Multimap<Coordinate, ShopperResponse> shoppers, Map<Integer, Customer> customers, BidStatus bidStatus, RoundStateEnum roundState, Set<Coordinate> shopsBidCoordinates, Map<Coordinate, ShopTracker> shops, SelfStateResponse selfStateResponse, int currentStep) {
         this.isBiddingOpen = isBiddingOpen;
         this.isTradeOpen = isTradeOpen;
         this.numberOfShoppers = numberOfShoppers;
@@ -45,6 +46,7 @@ public class RoundState {
         this.shopsBidCoordinates = shopsBidCoordinates;
         this.shops = shops;
         this.selfStateResponse = selfStateResponse;
+        this.currentStep = currentStep;
     }
 
     public boolean getIsBiddingOpen() {
@@ -134,5 +136,9 @@ public class RoundState {
 
     public SelfStateResponse getSelfStateResponse() {
         return selfStateResponse;
+    }
+
+    public int getCurrentStep() {
+        return currentStep;
     }
 }

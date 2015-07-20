@@ -106,7 +106,27 @@ public class RoundManager {
     }
 
     public RoundState onTradingStep(RoundState currentState, RoundState previousState, RoundState expectedCurrentState) {
+        if (currentState.getCurrentStep() % 7 == 0){
+            refreshStock(currentState);
+        }
         return handleShoppers(currentState, previousState, expectedCurrentState, influenceArea(currentState.getShops()));
+    }
+
+    private void refreshStock(RoundState currentState) {
+        System.out.println("Refreshing stock");
+        List<Stock> stocks = currentState.getStocks();
+        Stock cheapestStock = stocks.get(0);
+        for (Stock stock : stocks) {
+            if (stock.getWholesalePrice() < cheapestStock.getWholesalePrice()){
+                cheapestStock = stock;
+            }
+        }
+        Map<Coordinate, ShopTracker> shops = currentState.getShops();
+        for (ShopTracker shopTracker : shops.values()) {
+            if (shopTracker.isMine()){
+                httpGameSession.buyStock(1, shopTracker.getShopResponse(), cheapestStock.getStockType());
+            }
+        }
     }
 
     private Multimap<Coordinate, AdjacentShop> influenceArea(Map<Coordinate, ShopTracker> allShops) {
