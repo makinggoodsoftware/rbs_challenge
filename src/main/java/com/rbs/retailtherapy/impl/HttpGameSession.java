@@ -1,7 +1,6 @@
-package com.rbs.retailtherapy.client;
+package com.rbs.retailtherapy.impl;
 
 import com.rbs.retailtherapy.entity.*;
-import com.rbs.retailtherapy.impl.ParticipantImpl;
 import com.rbs.retailtherapy.model.Direction;
 import com.rbs.retailtherapy.model.Stock;
 

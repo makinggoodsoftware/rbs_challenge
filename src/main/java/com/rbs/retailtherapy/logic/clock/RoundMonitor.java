@@ -1,7 +1,6 @@
 package com.rbs.retailtherapy.logic.clock;
 
-import com.rbs.retailtherapy.client.HttpGameSession;
-import com.rbs.retailtherapy.impl.ParticipantImpl;
+import com.rbs.retailtherapy.impl.HttpGameSession;
 import com.rbs.retailtherapy.domain.BidStatus;
 import com.rbs.retailtherapy.domain.RoundState;
 import com.rbs.retailtherapy.logic.manager.RoundManager;

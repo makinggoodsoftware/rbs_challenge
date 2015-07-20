@@ -1,7 +1,7 @@
 package com.rbs.retailtherapy.logic.meta;
 
 import com.google.gson.Gson;
-import com.rbs.retailtherapy.client.CustomersFile;
+import com.rbs.retailtherapy.domain.CustomersFile;
 import com.rbs.retailtherapy.domain.Customer;
 import com.rbs.retailtherapy.domain.CustomerFileEntry;
 
@@ -24,9 +24,12 @@ public class CustomersLoader {
         Reader reader = new InputStreamReader(in);
         CustomersFile customersFile = gson.fromJson(reader, CustomersFile.class);
         for (CustomerFileEntry customerFileEntry : customersFile.getShoppers()) {
+            if (customerFileEntry.getStocks() == null){
+                throw new IllegalStateException("This customer doesn't have a list of shopping items");
+            }
             customers.add(new Customer(
                     customerFileEntry.getId(),
-                    customerFileEntry.getStockCountCollection(),
+                    customerFileEntry.getStocks(),
                     customerFileEntry.getInitialCash(),
                     null
             ));

@@ -1,4 +1,4 @@
-package com.rbs.retailtherapy.client;
+package com.rbs.retailtherapy.domain;
 
 import com.rbs.retailtherapy.domain.CustomerFileEntry;
 

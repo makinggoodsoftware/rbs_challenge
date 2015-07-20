@@ -1,6 +1,6 @@
 package com.rbs.retailtherapy.logic.clock;
 
-import com.rbs.retailtherapy.client.HttpGameSession;
+import com.rbs.retailtherapy.impl.HttpGameSession;
 import com.rbs.retailtherapy.domain.Coordinate;
 import com.rbs.retailtherapy.domain.RoundState;
 import com.rbs.retailtherapy.entity.RoundStateResponse;

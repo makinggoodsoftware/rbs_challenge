@@ -6,7 +6,7 @@ import java.util.List;
 
 public class CustomerFileEntry {
     private Integer id;
-    private List<Stock.StockType> stockCountCollection;
+    private List<Stock.StockType> stocks;
     private Double initialCash;
     private String GridPositions;
 
@@ -18,12 +18,12 @@ public class CustomerFileEntry {
         this.id = id;
     }
 
-    public List<Stock.StockType> getStockCountCollection() {
-        return stockCountCollection;
+    public List<Stock.StockType> getStocks() {
+        return stocks;
     }
 
-    public void setStockCountCollection(List<Stock.StockType> stockCountCollection) {
-        this.stockCountCollection = stockCountCollection;
+    public void setStocks(List<Stock.StockType> stocks) {
+        this.stocks = stocks;
     }
 
     public Double getInitialCash() {

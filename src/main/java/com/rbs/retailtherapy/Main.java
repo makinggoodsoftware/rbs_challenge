@@ -2,7 +2,6 @@ package com.rbs.retailtherapy;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.rbs.retailtherapy.client.HttpGameSession;
 import com.rbs.retailtherapy.domain.FixedSpacingInvestmentConfiguration;
 import com.rbs.retailtherapy.domain.GameState;
 import com.rbs.retailtherapy.domain.InvestmentConfiguration;
@@ -19,9 +18,14 @@ import com.rbs.retailtherapy.logic.strategy.*;
 
 public class Main {
     public static void main (String... args){
-        String baseUrl = "http://localhost:8081/RetailTherapy/jsonServices";
-        String userName = "Pulsy";
-        String password = "testing";
+//        String baseUrl = "http://localhost:8081/RetailTherapy/jsonServices";
+//        String userName = "Pulsy";
+//        String password = "testing";
+
+        String baseUrl = "http://stomv11236:8081/RetailTherapy/jsonServices";
+        String userName = "Making Good Software";
+        String password = "eastex01";
+
         String customersFileName = "customers.json";
         double maximumToInvest = 0.8;
         InvestmentConfiguration baseInvestmentConfiguration = new InvestmentConfiguration(

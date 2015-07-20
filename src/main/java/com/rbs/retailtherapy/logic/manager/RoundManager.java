@@ -1,7 +1,6 @@
 package com.rbs.retailtherapy.logic.manager;
 
-import com.rbs.retailtherapy.client.HttpGameSession;
-import com.rbs.retailtherapy.impl.ParticipantImpl;
+import com.rbs.retailtherapy.impl.HttpGameSession;
 import com.rbs.retailtherapy.domain.*;
 import com.rbs.retailtherapy.entity.RequestShopResponse;
 import com.rbs.retailtherapy.logic.coordinates.CoordinatesSelectors;
