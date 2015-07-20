@@ -1,11 +1,15 @@
 package com.rbs.retailtherapy.logic.manager;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.rbs.retailtherapy.domain.*;
 import com.rbs.retailtherapy.entity.RoundStateResponse;
+import com.rbs.retailtherapy.entity.SelfStateResponse;
 import com.rbs.retailtherapy.entity.ShopResponse;
 import com.rbs.retailtherapy.entity.ShopperResponse;
 import com.rbs.retailtherapy.impl.ParticipantImpl;
 import com.rbs.retailtherapy.model.RoundStateEnum;
+import com.rbs.retailtherapy.model.ShopOwnerResponse;
 import com.rbs.retailtherapy.model.Stock;
 import com.rbs.retailtherapy.model.StocksPerRound;
 
@@ -14,22 +18,24 @@ import java.util.*;
 public class RoundStateFactory {
     private final ParticipantImpl participantImpl;
     private final GridFactory gridFactory;
+    private final String myTeamName;
 
-    public RoundStateFactory(ParticipantImpl participantImpl, GridFactory gridFactory) {
+    public RoundStateFactory(ParticipantImpl participantImpl, GridFactory gridFactory, String myTeamName) {
         this.participantImpl = participantImpl;
         this.gridFactory = gridFactory;
+        this.myTeamName = myTeamName;
     }
 
-    public RoundState merge(RoundStateResponse newState, RoundState base, Map<Coordinate, ShopResponse> myShops, Map<Integer, Customer> customers) {
-        if (base == null){
-            return firstRoundState (newState, myShops, customers);
+    public RoundState merge(RoundStateResponse newState, RoundState base, Map<Coordinate, ShopResponse> myShops, Map<Integer, Customer> customers, SelfStateResponse selfStateResponse) {
+        if (base == null) {
+            return firstRoundState(newState, myShops, customers, selfStateResponse);
         } else {
-            return nextRoundState (newState, base, myShops);
+            return nextRoundState(newState, base, myShops, selfStateResponse);
         }
     }
 
-    private RoundState nextRoundState(RoundStateResponse newState, RoundState expectedState, Map<Coordinate, ShopResponse> myShops) {
-        return new RoundState(
+    private RoundState nextRoundState(RoundStateResponse newState, RoundState expectedState, Map<Coordinate, ShopResponse> myShops, SelfStateResponse selfStateResponse) {
+        RoundState roundState = new RoundState(
                 true,
                 newState.getRoundState() == RoundStateEnum.TRADING,
                 newState.getRoundParameters().getShoppersCount(),
@@ -41,12 +47,44 @@ public class RoundStateFactory {
                 expectedState.getCustomers(),
                 expectedState.getBidStatus(),
                 newState.getRoundState(),
-                expectedState.getShopsBidCoordinates());
+                expectedState.getShopsBidCoordinates(),
+                asMap(newState.getShopOwners(), selfStateResponse),
+                selfStateResponse);
+        roundState.setUserTracking(expectedState.getUserTracking());
+        return roundState;
     }
 
-    private RoundState firstRoundState(RoundStateResponse newState, Map<Coordinate, ShopResponse> myShops, Map<Integer, Customer> customers) {
+    private Map<Coordinate, ShopTracker> asMap(ShopOwnerResponse[] shopOwners, SelfStateResponse selfStateResponse) {
+        if (shopOwners == null) return new HashMap<>();
+        Map<Coordinate, ShopTracker> asMap = new HashMap<>();
+        for (ShopOwnerResponse shopOwner : shopOwners) {
+            if (shopOwner.getShops() != null) {
+                for (ShopResponse shopResponse : shopOwner.getShops()) {
+                    Coordinate coordinate = new Coordinate(shopResponse.getPosition().getCol(), shopResponse.getPosition().getRow());
+                    boolean isMine = shopOwner.getTeamName().equals(myTeamName);
+                    ShopTracker shopTracker;
+                    if (isMine){
+                        shopTracker = new ShopTracker(withCoordinate(selfStateResponse.getShops(), coordinate), isMine);
+                    } else {
+                        shopTracker = new ShopTracker(shopResponse, isMine);
+                    }
+                    asMap.put(coordinate, shopTracker);
+                }
+            }
+        }
+        return asMap;
+    }
+
+    private ShopResponse withCoordinate(ShopResponse[] shops, Coordinate coordinate) {
+        for (ShopResponse shop : shops) {
+            if (shop.getPosition().getRow() == coordinate.getRow() && shop.getPosition().getCol() == coordinate.getCol()) return shop;
+        }
+        throw new IllegalStateException();
+    }
+
+    private RoundState firstRoundState(RoundStateResponse newState, Map<Coordinate, ShopResponse> myShops, Map<Integer, Customer> customers, SelfStateResponse selfStateResponse) {
         StocksPerRound[] stocksPerRound = participantImpl.getGameParameters().getStocks();
-        List<Stock> stocks= findStocks (stocksPerRound, newState.getRoundId());
+        List<Stock> stocks = findStocks(stocksPerRound, newState.getRoundId());
         return new RoundState(
                 true,
                 newState.getRoundState() == RoundStateEnum.TRADING,
@@ -59,13 +97,15 @@ public class RoundStateFactory {
                 customers,
                 BidStatus.NOT_BID,
                 newState.getRoundState(),
-                new HashSet<Coordinate>());
+                new HashSet<Coordinate>(),
+                asMap(newState.getShopOwners(), selfStateResponse),
+                selfStateResponse);
 
     }
 
-    private Map<Coordinate, ShopperResponse> parse(ShopperResponse[] shoppers) {
-        if (shoppers == null) return new HashMap<>();
-        Map<Coordinate, ShopperResponse> parsedShoppers = new HashMap<>();
+    private Multimap<Coordinate, ShopperResponse> parse(ShopperResponse[] shoppers) {
+        if (shoppers == null) return ArrayListMultimap.create();
+        Multimap<Coordinate, ShopperResponse> parsedShoppers = ArrayListMultimap.create();
         for (ShopperResponse shopper : shoppers) {
             parsedShoppers.put(new Coordinate(shopper.getCurrentPosition().getCol(), shopper.getCurrentPosition().getRow()), shopper);
         }
@@ -74,7 +114,7 @@ public class RoundStateFactory {
 
     private List<Stock> findStocks(StocksPerRound[] stocksPerRound, int roundId) {
         for (StocksPerRound perRound : stocksPerRound) {
-            if (perRound.getRoundId() == roundId){
+            if (perRound.getRoundId() == roundId) {
                 return Arrays.asList(perRound.getStocks());
             }
         }
@@ -82,7 +122,7 @@ public class RoundStateFactory {
     }
 
     public RoundState copy(RoundState state) {
-        return new RoundState(
+        RoundState roundState = new RoundState(
                 state.getIsBiddingOpen(),
                 state.getIsTradeOpen(),
                 state.getNumberOfShoppers(),
@@ -94,6 +134,10 @@ public class RoundStateFactory {
                 state.getCustomers(),
                 state.getBidStatus(),
                 state.getRoundState(),
-                state.getShopsBidCoordinates());
+                state.getShopsBidCoordinates(),
+                state.getShops(),
+                state.getSelfStateResponse());
+        roundState.setUserTracking(state.getUserTracking());
+        return roundState;
     }
 }

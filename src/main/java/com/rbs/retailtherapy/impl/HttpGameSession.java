@@ -49,13 +49,13 @@ public class HttpGameSession {
         return httpGameClient.buyStock(buyStockParam);
     }
 
-    public void placeAdvert(Direction direction, ShopResponse shop, Stock.StockType stockType) {
+    public PlaceAdvertResponse placeAdvert(Direction direction, ShopResponse shop, Stock.StockType stockType) {
         PlaceAdvertParameters advertParameters = new PlaceAdvertParameters();
         advertParameters.setShopOwnerId(participantId);
         advertParameters.setStockType(stockType);
         advertParameters.setShopId(shop.getShopId());
         advertParameters.setDirection(direction);
-        httpGameClient.placeAdvert(advertParameters);
+        return httpGameClient.placeAdvert(advertParameters);
     }
 
     public PlaceBlockerResponse placeBlocker(Direction direction, ShopResponse shop) {

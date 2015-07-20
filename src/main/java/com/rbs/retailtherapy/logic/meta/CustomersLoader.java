@@ -9,9 +9,11 @@ import java.io.Reader;
 import java.util.*;
 
 public class CustomersLoader {
+    private final Dimension fromDimension;
     private final Gson gson;
 
-    public CustomersLoader(Gson gson) {
+    public CustomersLoader(Dimension fromDimension, Gson gson) {
+        this.fromDimension = fromDimension;
         this.gson = gson;
     }
 
@@ -60,26 +62,59 @@ public class CustomersLoader {
     private PathType pathTypeFrom(List<Coordinate> coordinateList) {
         List<Path> paths = new ArrayList<>();
         Coordinate initialCoordinate = coordinateList.get(0);
-        Direction lastDirection = guessDirection(initialCoordinate, coordinateList.get(1));
+        Coordinate secondCoordinate = coordinateList.get(1);
         List<Coordinate> coordinatesForDirection = new ArrayList<>();
         coordinatesForDirection.add(initialCoordinate);
+        coordinatesForDirection.add(secondCoordinate);
 
-        Coordinate previousCoordinate = initialCoordinate;
+        Direction lastDirection = guessDirection(initialCoordinate, secondCoordinate);
+        Coordinate previousCoordinate = secondCoordinate;
         for (int i = 2; i< coordinateList.size(); i++){
             Coordinate nextCoordinate = coordinateList.get(i);
             Direction thisDirection = guessDirection(previousCoordinate, nextCoordinate);
             if (changesDirection(lastDirection, thisDirection)){
-                Orientation orientation = orientation(lastDirection, coordinatesForDirection);
-                paths.add(new Path(lastDirection, orientation, coordinatesForDirection));
+                paths.add(createPath(lastDirection, coordinatesForDirection));
                 lastDirection = thisDirection;
                 coordinatesForDirection = new ArrayList<>();
             }
             coordinatesForDirection.add(nextCoordinate);
             previousCoordinate = nextCoordinate;
         }
-        Orientation orientation = orientation(lastDirection, coordinatesForDirection);
-        paths.add(new Path(lastDirection, orientation, coordinatesForDirection));
+        paths.add(createPath(lastDirection, coordinatesForDirection));
         return new PathType(paths, isLoop (paths.get(0), paths.get(paths.size() - 1)));
+    }
+
+    private Path createPath(Direction lastDirection, List<Coordinate> coordinatesForDirection) {
+        Orientation orientation = orientation(lastDirection, coordinatesForDirection);
+        boolean exhausted = exhausted(fromDimension, lastDirection, orientation, coordinatesForDirection);
+        return new Path(lastDirection, orientation, coordinatesForDirection, exhausted);
+    }
+
+    private boolean exhausted(Dimension fromDimension, Direction lastDirection, Orientation orientation, List<Coordinate> coordinatesForDirection) {
+        Coordinate lastCoordinate = coordinatesForDirection.get(coordinatesForDirection.size() - 1);
+        if (lastDirection == Direction.HORIZONTAL){
+            return orientation == Orientation.EAST ?
+                    lastCoordinate.getCol() == fromDimension.getCols() -1 :
+                    lastCoordinate.getCol() == 0;
+        } else if (lastDirection == Direction.VERTICAL) {
+            return orientation == Orientation.NORTH ?
+                    lastCoordinate.getRow() == fromDimension.getRows() -1 :
+                    lastCoordinate.getRow() == 0;
+        } else if (lastDirection == Direction.DIAGONAL) {
+            if (orientation == Orientation.NORTH_WEST){
+                return  (lastCoordinate.getRow() == fromDimension.getRows() -1) || lastCoordinate.getCol() == 0;
+            }
+            if (orientation == Orientation.NORTH_EAST){
+                return  (lastCoordinate.getRow() == fromDimension.getRows() -1) || lastCoordinate.getCol() == fromDimension.getCols() - 1;
+            }
+            if (orientation == Orientation.SOUTH_WEST){
+                return  (lastCoordinate.getRow() == 0) || lastCoordinate.getCol() == 0;
+            }
+            if (orientation == Orientation.NORTH_EAST){
+                return  (lastCoordinate.getRow() == 0) || lastCoordinate.getCol() == fromDimension.getCols() - 1;
+            }
+        }
+        return false;
     }
 
     private Orientation orientation(Direction lastDirection, List<Coordinate> coordinatesForDirection) {

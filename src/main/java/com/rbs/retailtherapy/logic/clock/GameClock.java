@@ -34,7 +34,7 @@ public class GameClock {
                 RoundMonitor roundMonitor = roundProvider.retrieve(roundStateResponse);
                 HttpGameSession httpGameSession = roundMonitor.getHttpSession();
                 ShopResponse[] shops = httpGameSession.getSelfState().getShops();
-                RoundState currentState = roundStateFactory.merge(roundStateResponse, expectedState, parseShops(shops), customers);
+                RoundState currentState = roundStateFactory.merge(roundStateResponse, expectedState, parseShops(shops), customers, httpGameSession.getSelfState());
                 expectedState = roundMonitor.tick(previousState, currentState, expectedState);
                 previousState = currentState;
             } catch (Exception e) {

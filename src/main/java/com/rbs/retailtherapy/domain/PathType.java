@@ -11,4 +11,11 @@ public class PathType {
         this.loops = loops;
     }
 
+    public List<Path> getPaths() {
+        return paths;
+    }
+
+    public boolean isLoops() {
+        return loops;
+    }
 }

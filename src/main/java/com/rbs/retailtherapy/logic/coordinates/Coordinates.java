@@ -112,10 +112,6 @@ public class Coordinates {
         return adjustedCoordinates;
     }
 
-    public Coordinate nextCoordinate(Dimension dimension, Position currentPosition, PathType pathType) {
-        return null;
-    }
-
     public Map<Coordinate, Coordinate> influenceArea(Dimension dimension, Set<Coordinate> from) {
         return null;
     }

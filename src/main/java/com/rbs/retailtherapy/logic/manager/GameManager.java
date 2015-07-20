@@ -9,7 +9,6 @@ import com.rbs.retailtherapy.impl.ParticipantImpl;
 import com.rbs.retailtherapy.logic.clock.RoundMonitor;
 import com.rbs.retailtherapy.logic.coordinates.Coordinates;
 import com.rbs.retailtherapy.logic.coordinates.CoordinatesSelectors;
-import com.rbs.retailtherapy.logic.meta.CustomersLoader;
 import com.rbs.retailtherapy.logic.strategy.ShopBidder;
 import com.rbs.retailtherapy.model.ParticipantParameters;
 
@@ -42,7 +41,7 @@ public class GameManager {
         ParticipantParameters participantParameters = new ParticipantParameters(userName, password);
         JoinGameResponse joinGameResponse = participantImpl.joinGame(participantParameters);
         HttpGameSession httpGameSession = new HttpGameSession(joinGameResponse.getParticipantId(), participantImpl);
-        RoundMonitor roundMonitor = new RoundMonitor(new RoundManager(httpGameSession, shopBidder, gameState, roundStateFactory, coordinatesSelectors, coordinates));
+        RoundMonitor roundMonitor = new RoundMonitor(new RoundManager(httpGameSession, shopBidder, gameState, roundStateFactory, coordinatesSelectors));
         updateGameState (roundStateResponse);
         return roundMonitor;
     }

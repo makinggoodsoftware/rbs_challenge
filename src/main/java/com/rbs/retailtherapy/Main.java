@@ -2,10 +2,7 @@ package com.rbs.retailtherapy;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.rbs.retailtherapy.domain.Customer;
-import com.rbs.retailtherapy.domain.FixedSpacingInvestmentConfiguration;
-import com.rbs.retailtherapy.domain.GameState;
-import com.rbs.retailtherapy.domain.InvestmentConfiguration;
+import com.rbs.retailtherapy.domain.*;
 import com.rbs.retailtherapy.impl.ParticipantImpl;
 import com.rbs.retailtherapy.logic.clock.GameClock;
 import com.rbs.retailtherapy.logic.clock.RoundProvider;
@@ -21,13 +18,13 @@ import java.util.Map;
 
 public class Main {
     public static void main (String... args){
-//        String baseUrl = "http://localhost:8081/RetailTherapy/jsonServices";
-//        String userName = "Pulsy";
-//        String password = "testing";
+        String baseUrl = "http://localhost:8081/RetailTherapy/jsonServices";
+        String userName = "Pulsy";
+        String password = "testing";
 
-        String baseUrl = "http://stomv11236:8081/RetailTherapy/jsonServices";
-        String userName = "Making Good Software";
-        String password = "eastex01";
+//        String baseUrl = "http://stomv11236:8081/RetailTherapy/jsonServices";
+//        String userName = "Making Good Software";
+//        String password = "eastex01";
 
         String customersFileName = "customers.json";
         double maximumToInvest = 0.8;
@@ -41,13 +38,14 @@ public class Main {
 
 
         Gson gson = new GsonBuilder().create();
-        CustomersLoader customersLoader = new CustomersLoader(gson);
+        Dimension initialDimension = new Dimension(41, 41);
+        CustomersLoader customersLoader = new CustomersLoader(initialDimension, gson);
         Map<Integer, Customer> customers = customersLoader.loadCustomersFromCpFileName(customersFileName);
 
         GameState gameState = new GameState(maximumToInvest);
         ParticipantImpl participantImpl = new ParticipantImpl(baseUrl);
         GridFactory gridFactory = new GridFactory();
-        RoundStateFactory roundStateFactory = new RoundStateFactory(participantImpl, gridFactory);
+        RoundStateFactory roundStateFactory = new RoundStateFactory(participantImpl, gridFactory, userName);
         Investor investor = new Investor();
         Coordinates coordinates = new Coordinates();
         CoordinatesSelectors coordinatesSelectors = new CoordinatesSelectors();
