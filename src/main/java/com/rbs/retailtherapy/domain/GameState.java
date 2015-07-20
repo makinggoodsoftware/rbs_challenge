@@ -9,7 +9,7 @@ import java.util.Map;
 
 
 public class GameState {
-    private final Map<Integer, RoundMonitor> roundMonitor = new HashMap<>();
+    private final Map<Integer, RoundMonitor> roundMonitors = new HashMap<>();
     private final double maximumToInvest;
 
     private double minimumBid;
@@ -21,7 +21,7 @@ public class GameState {
 
 
     public RoundMonitor getRoundMonitor(RoundStateResponse roundStateResponse) {
-        return roundMonitor.get(roundStateResponse.getRoundId());
+        return roundMonitors.get(roundStateResponse.getRoundId());
     }
 
     public List<Customer> getTypeOfShoppers() {
@@ -42,5 +42,9 @@ public class GameState {
 
     public double getMaximumToInvest() {
         return maximumToInvest;
+    }
+
+    public void addRound(RoundStateResponse roundStateResponse, RoundMonitor roundMonitor) {
+        roundMonitors.put(roundStateResponse.getRoundId(), roundMonitor);
     }
 }
