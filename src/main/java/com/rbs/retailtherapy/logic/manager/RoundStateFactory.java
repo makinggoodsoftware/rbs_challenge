@@ -20,9 +20,9 @@ public class RoundStateFactory {
         this.gridFactory = gridFactory;
     }
 
-    public RoundState merge(RoundStateResponse newState, RoundState base, Map<Coordinate, ShopResponse> myShops) {
+    public RoundState merge(RoundStateResponse newState, RoundState base, Map<Coordinate, ShopResponse> myShops, Map<Integer, Customer> customers) {
         if (base == null){
-            return firstRoundState (newState, myShops, base.getCustomers());
+            return firstRoundState (newState, myShops, customers);
         } else {
             return nextRoundState (newState, base, myShops);
         }

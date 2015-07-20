@@ -24,7 +24,7 @@ class RoundMonitorSpec extends Specification {
 
     def "if never bade for shops previously, bidding is open, and trading is closed, bid only" (){
         given:
-        roundStateFactoryMock.merge(httpStateMock, null, myShops) >> roundStateMock
+        roundStateFactoryMock.merge(httpStateMock, null, myShops, customers) >> roundStateMock
         roundStateMock.isBiddingOpen() >> true
         roundStateMock.isTradeOpen() >> false
         roundStateMock.bidStatus >> BidStatus.NOT_BID
@@ -39,7 +39,7 @@ class RoundMonitorSpec extends Specification {
 
     def "if waiting for bids, and all the bids are inconclusive, wait" (){
         given:
-        roundStateFactoryMock.merge(httpStateMock, previousRoundStateMock, myShops) >> roundStateMock
+        roundStateFactoryMock.merge(httpStateMock, previousRoundStateMock, myShops, customers) >> roundStateMock
         roundStateMock.isBiddingOpen() >> true
         roundStateMock.isTradeOpen() >> false
         roundStateMock.bidStatus >> BidStatus.BID_SENT
@@ -54,7 +54,7 @@ class RoundMonitorSpec extends Specification {
 
     def "if waiting for bids, and all the bids are completed, notify" (){
         given:
-        roundStateFactoryMock.merge(httpStateMock, previousRoundStateMock, myShops) >> roundStateMock
+        roundStateFactoryMock.merge(httpStateMock, previousRoundStateMock, myShops, customers) >> roundStateMock
         roundStateMock.isBiddingOpen() >> true
         roundStateMock.isTradeOpen() >> false
         roundStateMock.bidStatus >> BidStatus.BID_COMPLETE
@@ -69,7 +69,7 @@ class RoundMonitorSpec extends Specification {
 
     def "if trading is opened, cotinue trading" (){
         given:
-        roundStateFactoryMock.merge(httpStateMock, previousRoundStateMock, myShops) >> roundStateMock
+        roundStateFactoryMock.merge(httpStateMock, previousRoundStateMock, myShops, customers) >> roundStateMock
         roundStateMock.isBiddingOpen() >> true
         roundStateMock.isTradeOpen() >> true
         roundStateMock.bidStatus >> BidStatus.BID_COMPLETE

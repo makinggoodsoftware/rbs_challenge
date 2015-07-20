@@ -58,6 +58,6 @@ public class Main {
         GameManager gameManger = new GameManager(gameState, participantImpl, shopBidder, roundStateFactory, coordinatesSelectors, userName, password, coordinates, customers);
         RoundProvider roundProvider = new RoundProvider(gameManger, gameState);
 
-        new GameClock(roundProvider, participantImpl, roundStateFactory).start();
+        new GameClock(roundProvider, participantImpl, customers, roundStateFactory).start();
     }
 }

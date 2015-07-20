@@ -16,10 +16,12 @@ public class GameClock {
     private final RoundProvider roundProvider;
     private final ParticipantImpl httpGameClient;
     private final RoundStateFactory roundStateFactory;
+    private final Map<Integer, Customer> customers;
 
-    public GameClock(RoundProvider roundProvider, ParticipantImpl httpGameClient, RoundStateFactory roundStateFactory) {
+    public GameClock(RoundProvider roundProvider, ParticipantImpl httpGameClient, Map<Integer, Customer> customers, RoundStateFactory roundStateFactory) {
         this.roundProvider = roundProvider;
         this.httpGameClient = httpGameClient;
+        this.customers = customers;
         this.roundStateFactory = roundStateFactory;
     }
 
@@ -32,7 +34,7 @@ public class GameClock {
                 RoundMonitor roundMonitor = roundProvider.retrieve(roundStateResponse);
                 HttpGameSession httpGameSession = roundMonitor.getHttpSession();
                 ShopResponse[] shops = httpGameSession.getSelfState().getShops();
-                RoundState currentState = roundStateFactory.merge(roundStateResponse, expectedState, parseShops(shops));
+                RoundState currentState = roundStateFactory.merge(roundStateResponse, expectedState, parseShops(shops), customers);
                 expectedState = roundMonitor.tick(previousState, currentState, expectedState);
                 previousState = currentState;
             } catch (Exception e) {

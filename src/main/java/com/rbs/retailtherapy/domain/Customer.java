@@ -9,10 +9,10 @@ public class Customer {
     private final List<Stock.StockType> shoppingList;
     private final Double initialCash;
     private final List<Coordinate> path;
-    private final List<Direction> pathType;
+    private final PathType pathType;
 
 
-    public Customer(Integer id, List<Stock.StockType> shoppingList, Double initialCash, List<Coordinate> path, List<Direction> pathType) {
+    public Customer(Integer id, List<Stock.StockType> shoppingList, Double initialCash, List<Coordinate> path, PathType pathType) {
         this.id = id;
         this.shoppingList = shoppingList;
         this.initialCash = initialCash;
@@ -36,7 +36,7 @@ public class Customer {
         return path;
     }
 
-    public List<Direction> getPathType() {
+    public PathType getPathType() {
         return pathType;
     }
 }

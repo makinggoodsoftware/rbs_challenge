@@ -2,7 +2,6 @@ package com.rbs.retailtherapy.logic.coordinates;
 
 import com.rbs.retailtherapy.domain.Coordinate;
 import com.rbs.retailtherapy.domain.Dimension;
-import com.rbs.retailtherapy.domain.Direction;
 import com.rbs.retailtherapy.domain.PathType;
 import com.rbs.retailtherapy.model.Position;
 
@@ -113,7 +112,7 @@ public class Coordinates {
         return adjustedCoordinates;
     }
 
-    public Coordinate nextCoordinate(Dimension dimension, Position currentPosition, List<Direction> pathType) {
+    public Coordinate nextCoordinate(Dimension dimension, Position currentPosition, PathType pathType) {
         return null;
     }
 

@@ -57,34 +57,63 @@ public class CustomersLoader {
         return coordinates;
     }
 
-    private List<Direction> pathTypeFrom(List<Coordinate> coordinateList) {
-        List<Direction> directions = new ArrayList<>();
+    private PathType pathTypeFrom(List<Coordinate> coordinateList) {
+        List<Path> paths = new ArrayList<>();
         Coordinate initialCoordinate = coordinateList.get(0);
+        Direction lastDirection = guessDirection(initialCoordinate, coordinateList.get(1));
+        List<Coordinate> coordinatesForDirection = new ArrayList<>();
+        coordinatesForDirection.add(initialCoordinate);
+
         Coordinate previousCoordinate = initialCoordinate;
-        for (int i = 1; i< coordinateList.size(); i++){
+        for (int i = 2; i< coordinateList.size(); i++){
             Coordinate nextCoordinate = coordinateList.get(i);
             Direction thisDirection = guessDirection(previousCoordinate, nextCoordinate);
-            if (changesDirection(directions, thisDirection)){
-                directions.add(thisDirection);
+            if (changesDirection(lastDirection, thisDirection)){
+                Orientation orientation = orientation(lastDirection, coordinatesForDirection);
+                paths.add(new Path(lastDirection, orientation, coordinatesForDirection));
+                lastDirection = thisDirection;
+                coordinatesForDirection = new ArrayList<>();
             }
+            coordinatesForDirection.add(nextCoordinate);
             previousCoordinate = nextCoordinate;
         }
-        return directions;
+        Orientation orientation = orientation(lastDirection, coordinatesForDirection);
+        paths.add(new Path(lastDirection, orientation, coordinatesForDirection));
+        return new PathType(paths, isLoop (paths.get(0), paths.get(paths.size() - 1)));
     }
 
-    private boolean changesDirection(List<Direction> directions, Direction thisDirection) {
-        if (directions.size() == 0) return true;
+    private Orientation orientation(Direction lastDirection, List<Coordinate> coordinatesForDirection) {
+        if (coordinatesForDirection.size() == 1) return Orientation.NONE;
+        Coordinate from = coordinatesForDirection.get(0);
+        Coordinate to = coordinatesForDirection.get(1);
+        if (lastDirection == Direction.HORIZONTAL){
+            return to.getCol() > from.getCol() ? Orientation.EAST : Orientation.WEST;
+        } else if (lastDirection == Direction.VERTICAL) {
+            return to.getRow() > from.getRow() ? Orientation.NORTH : Orientation.SOUTH;
+        } else if (lastDirection == Direction.DIAGONAL) {
+            return to.getRow() > from.getRow() ?
+                    to.getCol() > from.getCol() ? Orientation.NORTH_EAST : Orientation.NORTH_WEST :
+                    to.getCol() > from.getCol() ? Orientation.SOUTH_EAST : Orientation.SOUTH_WEST;
+        }
+        throw new IllegalStateException();
+    }
 
-        return ! (directions.get(directions.size() -1) == thisDirection);
+    private boolean isLoop(Path initialPath, Path lastPath) {
+        return initialPath.getCoordinates().get(0).equals(lastPath.getCoordinates().get(lastPath.getCoordinates().size() - 1));
+    }
+
+    private boolean changesDirection(Direction lastDirection, Direction thisDirection) {
+        return lastDirection == null || !(lastDirection == thisDirection);
+
     }
 
     private Direction guessDirection(Coordinate initialCoordinate, Coordinate nextCoordinate) {
         if (Objects.equals(initialCoordinate.getCol(), nextCoordinate.getCol())){
-            return Direction.HORIZONTAL;
+            return Direction.VERTICAL;
         }
 
         if (Objects.equals(initialCoordinate.getRow(), nextCoordinate.getRow())){
-            return Direction.VERTICAL;
+            return Direction.HORIZONTAL;
         }
 
         return Direction.DIAGONAL;
