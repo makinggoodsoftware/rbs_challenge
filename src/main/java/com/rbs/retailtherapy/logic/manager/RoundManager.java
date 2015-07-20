@@ -4,9 +4,11 @@ import com.rbs.retailtherapy.impl.HttpGameSession;
 import com.rbs.retailtherapy.domain.*;
 import com.rbs.retailtherapy.entity.RequestShopResponse;
 import com.rbs.retailtherapy.entity.ShopperResponse;
+import com.rbs.retailtherapy.logic.coordinates.Coordinates;
 import com.rbs.retailtherapy.logic.coordinates.CoordinatesSelectors;
 import com.rbs.retailtherapy.logic.strategy.ShopBidder;
 import com.rbs.retailtherapy.model.CellStatus;
+import com.rbs.retailtherapy.model.Position;
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,17 +21,19 @@ public class RoundManager {
     private final GameState gameState;
     private final RoundStateFactory roundStateFactory;
     private final CoordinatesSelectors coordinatesSelectors;
+    private final Coordinates coordinates;
 
-    public RoundManager(HttpGameSession httpGameSession, ShopBidder shopBidder, GameState gameState, RoundStateFactory roundStateFactory, CoordinatesSelectors coordinatesSelectors) {
+    public RoundManager(HttpGameSession httpGameSession, ShopBidder shopBidder, GameState gameState, RoundStateFactory roundStateFactory, CoordinatesSelectors coordinatesSelectors, Coordinates coordinates) {
         this.httpGameSession = httpGameSession;
         this.shopBidder = shopBidder;
         this.gameState = gameState;
         this.roundStateFactory = roundStateFactory;
         this.coordinatesSelectors = coordinatesSelectors;
+        this.coordinates = coordinates;
     }
 
     public void onNewRound(RoundState currentState) {
-        System.out.println("Round state " + currentState.getRoundState ());
+        System.out.println("Round state " + currentState.getRoundState());
     }
 
     public RoundState onBiddingOpened(RoundState currentState) {
@@ -101,9 +105,22 @@ public class RoundManager {
 
     private RoundState trackShoppers(RoundState currentState) {
         Map<Coordinate, ShopperResponse> shoppers = currentState.getShoppers();
+        Map<Coordinate, Coordinate> influenceArea = coordinates.influenceArea (currentState.getDimension(), currentState.getMyShops());
         for (Map.Entry<Coordinate, ShopperResponse> coordinateShopperResponseEntry : shoppers.entrySet()) {
             System.out.println("Shopper in: " + coordinateShopperResponseEntry.getKey());
+            ShopperResponse shopper = coordinateShopperResponseEntry.getValue();
+            Coordinate nextMovement = guessNextMovement (currentState, shopper);
+            if (influenceArea.values().contains(nextMovement)){
+                System.out.println("Shopper about to enter influence Area!");
+            }
         }
         return currentState;
+    }
+
+    private Coordinate guessNextMovement(RoundState currentState, ShopperResponse shopper) {
+        Position currentPosition = shopper.getCurrentPosition();
+        int shopperId = shopper.getShopperId();
+        Customer customer = currentState.getCustomer(shopperId);
+        return coordinates.nextCoordinate (currentState.getDimension(), currentPosition, customer.getPathType());
     }
 }

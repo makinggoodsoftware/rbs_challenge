@@ -1,6 +1,10 @@
 package com.rbs.retailtherapy.logic.coordinates;
 
 import com.rbs.retailtherapy.domain.Coordinate;
+import com.rbs.retailtherapy.domain.Dimension;
+import com.rbs.retailtherapy.domain.Direction;
+import com.rbs.retailtherapy.domain.PathType;
+import com.rbs.retailtherapy.model.Position;
 
 import java.util.*;
 
@@ -107,5 +111,13 @@ public class Coordinates {
             adjustedCoordinates.add(toAdjustIter.adjust(deltaCol, deltaRow));
         }
         return adjustedCoordinates;
+    }
+
+    public Coordinate nextCoordinate(Dimension dimension, Position currentPosition, List<Direction> pathType) {
+        return null;
+    }
+
+    public Map<Coordinate, Coordinate> influenceArea(Dimension dimension, Set<Coordinate> from) {
+        return null;
     }
 }

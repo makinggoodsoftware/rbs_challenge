@@ -1,0 +1,724 @@
+{
+  "stocksPerRound": {
+    "1": [
+      {
+        "stockType": "Sushi",
+        "classification": "Cheap",
+        "wholesalePrice": 5.0,
+        "retailPrice": 20.25,
+        "units": 0
+      },
+      {
+        "stockType": "Doughnut",
+        "classification": "Cheap",
+        "wholesalePrice": 1.0,
+        "retailPrice": 10.45,
+        "units": 0
+      },
+      {
+        "stockType": "Camera",
+        "classification": "Expensive",
+        "wholesalePrice": 55.0,
+        "retailPrice": 137.5,
+        "units": 0
+      },
+      {
+        "stockType": "Makeup",
+        "classification": "Medium",
+        "wholesalePrice": 15.0,
+        "retailPrice": 75.0,
+        "units": 0
+      },
+      {
+        "stockType": "Robot",
+        "classification": "Expensive",
+        "wholesalePrice": 100.0,
+        "retailPrice": 220.0,
+        "units": 0
+      },
+      {
+        "stockType": "Mobile",
+        "classification": "Medium",
+        "wholesalePrice": 45.0,
+        "retailPrice": 99.55,
+        "units": 0
+      },
+      {
+        "stockType": "Whiskey",
+        "classification": "Cheap",
+        "wholesalePrice": 7.0,
+        "retailPrice": 45.0,
+        "units": 0
+      },
+      {
+        "stockType": "Ramen",
+        "classification": "Cheap",
+        "wholesalePrice": 4.0,
+        "retailPrice": 21.4,
+        "units": 0
+      },
+      {
+        "stockType": "Vinyl",
+        "classification": "Cheap",
+        "wholesalePrice": 8.0,
+        "retailPrice": 32.2,
+        "units": 0
+      },
+      {
+        "stockType": "Laptop",
+        "classification": "Expensive",
+        "wholesalePrice": 80.0,
+        "retailPrice": 160.4,
+        "units": 0
+      }
+    ],
+    "2": [
+      {
+        "stockType": "Sushi",
+        "classification": "Cheap",
+        "wholesalePrice": 5.0,
+        "retailPrice": 25.15,
+        "units": 0
+      },
+      {
+        "stockType": "Doughnut",
+        "classification": "Cheap",
+        "wholesalePrice": 6.0,
+        "retailPrice": 12.2,
+        "units": 0
+      },
+      {
+        "stockType": "Camera",
+        "classification": "Expensive",
+        "wholesalePrice": 79.0,
+        "retailPrice": 114.55,
+        "units": 0
+      },
+      {
+        "stockType": "Makeup",
+        "classification": "Medium",
+        "wholesalePrice": 22.0,
+        "retailPrice": 41.00,
+        "units": 0
+      },
+      {
+        "stockType": "Robot",
+        "classification": "Expensive",
+        "wholesalePrice": 107.0,
+        "retailPrice": 160.0,
+        "units": 0
+      },
+      {
+        "stockType": "Mobile",
+        "classification": "Medium",
+        "wholesalePrice": 66.0,
+        "retailPrice": 73.92,
+        "units": 0
+      },
+      {
+        "stockType": "Whiskey",
+        "classification": "Cheap",
+        "wholesalePrice": 15.0,
+        "retailPrice": 75.5,
+        "units": 0
+      },
+      {
+        "stockType": "Ramen",
+        "classification": "Cheap",
+        "wholesalePrice": 6.0,
+        "retailPrice": 25.0,
+        "units": 0
+      },
+      {
+        "stockType": "Vinyl",
+        "classification": "Cheap",
+        "wholesalePrice": 17.0,
+        "retailPrice": 33.0,
+        "units": 0
+      },
+      {
+        "stockType": "Laptop",
+        "classification": "Expensive",
+        "wholesalePrice": 75.0,
+        "retailPrice": 110.0,
+        "units": 0
+      }
+    ],
+    "3": [
+      {
+        "stockType": "Sushi",
+        "classification": "Cheap",
+        "wholesalePrice": 5.0,
+        "retailPrice": 32.5,
+        "units": 0
+      },
+      {
+        "stockType": "Doughnut",
+        "classification": "Cheap",
+        "wholesalePrice": 8.0,
+        "retailPrice": 21.08,
+        "units": 0
+      },
+      {
+        "stockType": "Camera",
+        "classification": "Medium",
+        "wholesalePrice": 65.0,
+        "retailPrice": 110.5,
+        "units": 0
+      },
+      {
+        "stockType": "Makeup",
+        "classification": "Medium",
+        "wholesalePrice": 33.0,
+        "retailPrice": 62.7,
+        "units": 0
+      },
+      {
+        "stockType": "Robot",
+        "classification": "Expensive",
+        "wholesalePrice": 105.0,
+        "retailPrice": 157.5,
+        "units": 0
+      },
+      {
+        "stockType": "Mobile",
+        "classification": "Medium",
+        "wholesalePrice": 67.0,
+        "retailPrice": 100.5,
+        "units": 0
+      },
+      {
+        "stockType": "Whiskey",
+        "classification": "Cheap",
+        "wholesalePrice": 21.0,
+        "retailPrice": 42.21,
+        "units": 0
+      },
+      {
+        "stockType": "Ramen",
+        "classification": "Cheap",
+        "wholesalePrice": 5.0,
+        "retailPrice": 16.6,
+        "units": 0
+      },
+      {
+        "stockType": "Vinyl",
+        "classification": "Cheap",
+        "wholesalePrice": 18.0,
+        "retailPrice": 30.6,
+        "units": 0
+      },
+      {
+        "stockType": "Laptop",
+        "classification": "Expensive",
+        "wholesalePrice": 75.0,
+        "retailPrice": 110.75,
+        "units": 0
+      }
+    ],
+    "4": [
+      {
+        "stockType": "Sushi",
+        "classification": "Medium",
+        "wholesalePrice": 6.0,
+        "retailPrice": 24.0,
+        "units": 0
+      },
+      {
+        "stockType": "Doughnut",
+        "classification": "Expensive",
+        "wholesalePrice": 2.0,
+        "retailPrice": 7.0,
+        "units": 0
+      },
+      {
+        "stockType": "Camera",
+        "classification": "Cheap",
+        "wholesalePrice": 35.0,
+        "retailPrice": 62.0,
+        "units": 0
+      },
+      {
+        "stockType": "Makeup",
+        "classification": "Cheap",
+        "wholesalePrice": 12.0,
+        "retailPrice": 55.0,
+        "units": 0
+      },
+      {
+        "stockType": "Robot",
+        "classification": "Cheap",
+        "wholesalePrice": 90.0,
+        "retailPrice": 200.0,
+        "units": 0
+      },
+      {
+        "stockType": "Mobile",
+        "classification": "Expensive",
+        "wholesalePrice": 90.0,
+        "retailPrice": 108.0,
+        "units": 0
+      },
+      {
+        "stockType": "Whiskey",
+        "classification": "Expensive",
+        "wholesalePrice": 21.0,
+        "retailPrice": 89.0,
+        "units": 0
+      },
+      {
+        "stockType": "Ramen",
+        "classification": "Medium",
+        "wholesalePrice": 3.0,
+        "retailPrice": 16.25,
+        "units": 0
+      },
+      {
+        "stockType": "Vinyl",
+        "classification": "Medium",
+        "wholesalePrice": 16.0,
+        "retailPrice": 45.0,
+        "units": 0
+      },
+      {
+        "stockType": "Laptop",
+        "classification": "Cheap",
+        "wholesalePrice": 30.0,
+        "retailPrice": 99.0,
+        "units": 0
+      }
+    ],
+    "5": [
+      {
+        "stockType": "Sushi",
+        "classification": "Cheap",
+        "wholesalePrice": 5.0,
+        "retailPrice": 16.5,
+        "units": 0
+      },
+      {
+        "stockType": "Doughnut",
+        "classification": "Cheap",
+        "wholesalePrice": 1.0,
+        "retailPrice": 7.0,
+        "units": 0
+      },
+      {
+        "stockType": "Camera",
+        "classification": "Expensive",
+        "wholesalePrice": 80.0,
+        "retailPrice": 210.0,
+        "units": 0
+      },
+      {
+        "stockType": "Makeup",
+        "classification": "Medium",
+        "wholesalePrice": 38.0,
+        "retailPrice": 57.0,
+        "units": 0
+      },
+      {
+        "stockType": "Robot",
+        "classification": "Expensive",
+        "wholesalePrice": 111.0,
+        "retailPrice": 188.7,
+        "units": 0
+      },
+      {
+        "stockType": "Mobile",
+        "classification": "Medium",
+        "wholesalePrice": 59.0,
+        "retailPrice": 105.2,
+        "units": 0
+      },
+      {
+        "stockType": "Whiskey",
+        "classification": "Cheap",
+        "wholesalePrice": 22.0,
+        "retailPrice": 77.0,
+        "units": 0
+      },
+      {
+        "stockType": "Ramen",
+        "classification": "Cheap",
+        "wholesalePrice": 5.0,
+        "retailPrice": 32.5,
+        "units": 0
+      },
+      {
+        "stockType": "Vinyl",
+        "classification": "Cheap",
+        "wholesalePrice": 22.0,
+        "retailPrice": 50.4,
+        "units": 0
+      },
+      {
+        "stockType": "Laptop",
+        "classification": "Medium",
+        "wholesalePrice": 30.0,
+        "retailPrice": 90.8,
+        "units": 0
+      }
+    ],
+    "6": [
+      {
+        "stockType": "Sushi",
+        "classification": "Cheap",
+        "wholesalePrice": 3.0,
+        "retailPrice": 15.0,
+        "units": 0
+      },
+      {
+        "stockType": "Doughnut",
+        "classification": "Cheap",
+        "wholesalePrice": 3.0,
+        "retailPrice": 14.0,
+        "units": 0
+      },
+      {
+        "stockType": "Camera",
+        "classification": "Expensive",
+        "wholesalePrice": 75.0,
+        "retailPrice": 105.5,
+        "units": 0
+      },
+      {
+        "stockType": "Makeup",
+        "classification": "Medium",
+        "wholesalePrice": 41.0,
+        "retailPrice": 63.0,
+        "units": 0
+      },
+      {
+        "stockType": "Robot",
+        "classification": "Expensive",
+        "wholesalePrice": 100.0,
+        "retailPrice": 300.0,
+        "units": 0
+      },
+      {
+        "stockType": "Mobile",
+        "classification": "Medium",
+        "wholesalePrice": 58.0,
+        "retailPrice": 130.4,
+        "units": 0
+      },
+      {
+        "stockType": "Whiskey",
+        "classification": "Cheap",
+        "wholesalePrice": 24.0,
+        "retailPrice": 80.2,
+        "units": 0
+      },
+      {
+        "stockType": "Ramen",
+        "classification": "Cheap",
+        "wholesalePrice": 7.0,
+        "retailPrice": 32.0,
+        "units": 0
+      },
+      {
+        "stockType": "Vinyl",
+        "classification": "Cheap",
+        "wholesalePrice": 25.0,
+        "retailPrice": 32.5,
+        "units": 0
+      },
+      {
+        "stockType": "Laptop",
+        "classification": "Expensive",
+        "wholesalePrice": 71.0,
+        "retailPrice": 130.52,
+        "units": 0
+      }
+    ],
+    "7": [
+      {
+        "stockType": "Sushi",
+        "classification": "Cheap",
+        "wholesalePrice": 5.0,
+        "retailPrice": 25.15,
+        "units": 0
+      },
+      {
+        "stockType": "Doughnut",
+        "classification": "Cheap",
+        "wholesalePrice": 1.0,
+        "retailPrice": 10.2,
+        "units": 0
+      },
+      {
+        "stockType": "Camera",
+        "classification": "Expensive",
+        "wholesalePrice": 75.0,
+        "retailPrice": 120.0,
+        "units": 0
+      },
+      {
+        "stockType": "Makeup",
+        "classification": "Medium",
+        "wholesalePrice": 35.0,
+        "retailPrice": 99.05,
+        "units": 0
+      },
+      {
+        "stockType": "Robot",
+        "classification": "Expensive",
+        "wholesalePrice": 105.0,
+        "retailPrice": 210.15,
+        "units": 0
+      },
+      {
+        "stockType": "Mobile",
+        "classification": "Medium",
+        "wholesalePrice": 65.0,
+        "retailPrice": 110.5,
+        "units": 0
+      },
+      {
+        "stockType": "Whiskey",
+        "classification": "Cheap",
+        "wholesalePrice": 13.0,
+        "retailPrice": 40.8,
+        "units": 0
+      },
+      {
+        "stockType": "Ramen",
+        "classification": "Cheap",
+        "wholesalePrice": 6.0,
+        "retailPrice": 26.18,
+        "units": 0
+      },
+      {
+        "stockType": "Vinyl",
+        "classification": "Cheap",
+        "wholesalePrice": 15.0,
+        "retailPrice": 32.8,
+        "units": 0
+      },
+      {
+        "stockType": "Laptop",
+        "classification": "Expensive",
+        "wholesalePrice": 72.0,
+        "retailPrice": 115.2,
+        "units": 0
+      }
+    ],
+    "8": [
+      {
+        "stockType": "Sushi",
+        "classification": "Cheap",
+        "wholesalePrice": 5.0,
+        "retailPrice": 10.0,
+        "units": 0
+      },
+      {
+        "stockType": "Doughnut",
+        "classification": "Cheap",
+        "wholesalePrice": 9.0,
+        "retailPrice": 18.0,
+        "units": 0
+      },
+      {
+        "stockType": "Camera",
+        "classification": "Medium",
+        "wholesalePrice": 69.0,
+        "retailPrice": 124.2,
+        "units": 0
+      },
+      {
+        "stockType": "Makeup",
+        "classification": "Medium",
+        "wholesalePrice": 37.0,
+        "retailPrice": 74.0,
+        "units": 0
+      },
+      {
+        "stockType": "Robot",
+        "classification": "Expensive",
+        "wholesalePrice": 99.0,
+        "retailPrice": 128.7,
+        "units": 0
+      },
+      {
+        "stockType": "Mobile",
+        "classification": "Medium",
+        "wholesalePrice": 65.0,
+        "retailPrice": 91.0,
+        "units": 0
+      },
+      {
+        "stockType": "Whiskey",
+        "classification": "Cheap",
+        "wholesalePrice": 12.0,
+        "retailPrice": 45.0,
+        "units": 0
+      },
+      {
+        "stockType": "Ramen",
+        "classification": "Cheap",
+        "wholesalePrice": 7.0,
+        "retailPrice": 14.0,
+        "units": 0
+      },
+      {
+        "stockType": "Vinyl",
+        "classification": "Cheap",
+        "wholesalePrice": 19.0,
+        "retailPrice": 35.51,
+        "units": 0
+      },
+      {
+        "stockType": "Laptop",
+        "classification": "Medium",
+        "wholesalePrice": 68.0,
+        "retailPrice": 136.0,
+        "units": 0
+      }
+    ],
+    "9": [
+      {
+        "stockType": "Sushi",
+        "classification": "Medium",
+        "wholesalePrice": 45.0,
+        "retailPrice": 80.8,
+        "units": 0
+      },
+      {
+        "stockType": "Doughnut",
+        "classification": "Expensive",
+        "wholesalePrice": 1.0,
+        "retailPrice": 25.58,
+        "units": 0
+      },
+      {
+        "stockType": "Camera",
+        "classification": "Cheap",
+        "wholesalePrice": 10.0,
+        "retailPrice": 40.0,
+        "units": 0
+      },
+      {
+        "stockType": "Makeup",
+        "classification": "Expensive",
+        "wholesalePrice": 70.0,
+        "retailPrice": 75.1,
+        "units": 0
+      },
+      {
+        "stockType": "Robot",
+        "classification": "Cheap",
+        "wholesalePrice": 200.0,
+        "retailPrice": 290.8,
+        "units": 0
+      },
+      {
+        "stockType": "Mobile",
+        "classification": "Cheap",
+        "wholesalePrice": 35.0,
+        "retailPrice": 25.5,
+        "units": 0
+      },
+      {
+        "stockType": "Whiskey",
+        "classification": "Expensive",
+        "wholesalePrice": 70.0,
+        "retailPrice": 70.0,
+        "units": 0
+      },
+      {
+        "stockType": "Ramen",
+        "classification": "Medium",
+        "wholesalePrice": 50.0,
+        "retailPrice": 60.65,
+        "units": 0
+      },
+      {
+        "stockType": "Vinyl",
+        "classification": "Expensive",
+        "wholesalePrice": 50.0,
+        "retailPrice": 45.0,
+        "units": 0
+      },
+      {
+        "stockType": "Laptop",
+        "classification": "Cheap",
+        "wholesalePrice": 20.0,
+        "retailPrice": 30.0,
+        "units": 0
+      }
+    ],
+    "10": [
+      {
+        "stockType": "Sushi",
+        "classification": "Cheap",
+        "wholesalePrice": 5.0,
+        "retailPrice": 25.0,
+        "units": 0
+      },
+      {
+        "stockType": "Doughnut",
+        "classification": "Cheap",
+        "wholesalePrice": 1.0,
+        "retailPrice": 10.0,
+        "units": 0
+      },
+      {
+        "stockType": "Camera",
+        "classification": "Expensive",
+        "wholesalePrice": 60.0,
+        "retailPrice": 110.00,
+        "units": 0
+      },
+      {
+        "stockType": "Makeup",
+        "classification": "Medium",
+        "wholesalePrice": 38.0,
+        "retailPrice": 80.4,
+        "units": 0
+      },
+      {
+        "stockType": "Robot",
+        "classification": "Expensive",
+        "wholesalePrice": 102.0,
+        "retailPrice": 320.2,
+        "units": 0
+      },
+      {
+        "stockType": "Mobile",
+        "classification": "Medium",
+        "wholesalePrice": 67.0,
+        "retailPrice": 130.8,
+        "units": 0
+      },
+      {
+        "stockType": "Whiskey",
+        "classification": "Cheap",
+        "wholesalePrice": 11.0,
+        "retailPrice": 89.0,
+        "units": 0
+      },
+      {
+        "stockType": "Ramen",
+        "classification": "Cheap",
+        "wholesalePrice": 2.0,
+        "retailPrice": 24.0,
+        "units": 0
+      },
+      {
+        "stockType": "Vinyl",
+        "classification": "Cheap",
+        "wholesalePrice": 20.0,
+        "retailPrice": 56.0,
+        "units": 0
+      },
+      {
+        "stockType": "Laptop",
+        "classification": "Expensive",
+        "wholesalePrice": 200.0,
+        "retailPrice": 350.9,
+        "units": 0
+      }
+    ]
+  }
+}

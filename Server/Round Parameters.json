@@ -1,0 +1,84 @@
+{
+  "roundParameters": [
+    {
+      "roundId": 1,
+      "penaltyMult": 1.2,
+      "shoppersCount": 30,
+      "ShopperIds": null,
+      "advertPrice": 15.0,
+      "blockerPrice": 30.0
+    },
+    {
+      "roundId": 2,
+      "penaltyMult": 1.2,
+      "shoppersCount": 30,
+      "ShopperIds": null,
+      "advertPrice": 15.0,
+      "blockerPrice": 30.0
+    },
+    {
+      "roundId": 3,
+      "penaltyMult": 1.2,
+      "shoppersCount": 20,
+      "ShopperIds": null,
+      "advertPrice": 25.0,
+      "blockerPrice": 50.0
+    },
+    {
+      "roundId": 4,
+      "penaltyMult": 1.8,
+      "shoppersCount": 30,
+      "ShopperIds": null,
+      "advertPrice": 45.0,
+      "blockerPrice": 90.0
+    },
+    {
+      "roundId": 5,
+      "penaltyMult": 1.3,
+      "shoppersCount": 30,
+      "ShopperIds": null,
+      "advertPrice": 15.0,
+      "blockerPrice": 30.0
+    },
+    {
+      "roundId": 6,
+      "penaltyMult": 1.3,
+      "shoppersCount": 30,
+      "ShopperIds": null,
+      "advertPrice": 25.0,
+      "blockerPrice": 50.0
+    },
+    {
+      "roundId": 7,
+      "penaltyMult": 1.4,
+      "shoppersCount": 30,
+      "ShopperIds": null,
+      "advertPrice": 25.0,
+      "blockerPrice": 50.0
+    },
+    {
+      "roundId": 8,
+      "penaltyMult": 2.1,
+      "shoppersCount": 50,
+      "ShopperIds": null,
+      "advertPrice": 60.0,
+      "blockerPrice": 120.0
+    },
+    {
+      "roundId": 9,
+      "penaltyMult": 1.5,
+      "shoppersCount": 25,
+      "ShopperIds": null,
+      "advertPrice": 25.0,
+      "blockerPrice": 50.0
+    },
+    {
+      "roundId": 10,
+      "penaltyMult": 1.5,
+      "shoppersCount": 30,
+      "ShopperIds": null,
+      "advertPrice": 25.0,
+      "blockerPrice": 50.0
+    }
+  ]
+}

@@ -1,9 +1,6 @@
 package com.rbs.retailtherapy.logic.manager;
 
-import com.rbs.retailtherapy.domain.BidStatus;
-import com.rbs.retailtherapy.domain.Coordinate;
-import com.rbs.retailtherapy.domain.Dimension;
-import com.rbs.retailtherapy.domain.RoundState;
+import com.rbs.retailtherapy.domain.*;
 import com.rbs.retailtherapy.entity.RoundStateResponse;
 import com.rbs.retailtherapy.entity.ShopResponse;
 import com.rbs.retailtherapy.entity.ShopperResponse;
@@ -25,7 +22,7 @@ public class RoundStateFactory {
 
     public RoundState merge(RoundStateResponse newState, RoundState base, Map<Coordinate, ShopResponse> myShops) {
         if (base == null){
-            return firstRoundState (newState, myShops);
+            return firstRoundState (newState, myShops, base.getCustomers());
         } else {
             return nextRoundState (newState, base, myShops);
         }
@@ -41,12 +38,13 @@ public class RoundStateFactory {
                 newState.getRoundParameters().getInitialBatcoins(),
                 gridFactory.from(newState.getGridCells(), myShops),
                 parse(newState.getShoppers()),
+                expectedState.getCustomers(),
                 expectedState.getBidStatus(),
                 newState.getRoundState(),
                 expectedState.getShopsBidCoordinates());
     }
 
-    private RoundState firstRoundState(RoundStateResponse newState, Map<Coordinate, ShopResponse> myShops) {
+    private RoundState firstRoundState(RoundStateResponse newState, Map<Coordinate, ShopResponse> myShops, Map<Integer, Customer> customers) {
         StocksPerRound[] stocksPerRound = participantImpl.getGameParameters().getStocks();
         List<Stock> stocks= findStocks (stocksPerRound, newState.getRoundId());
         return new RoundState(
@@ -58,6 +56,7 @@ public class RoundStateFactory {
                 newState.getRoundParameters().getInitialBatcoins(),
                 gridFactory.from(newState.getGridCells(), myShops),
                 parse(newState.getShoppers()),
+                customers,
                 BidStatus.NOT_BID,
                 newState.getRoundState(),
                 new HashSet<Coordinate>());
@@ -92,6 +91,7 @@ public class RoundStateFactory {
                 state.getInitialMoney(),
                 state.getGrid(),
                 state.getShoppers(),
+                state.getCustomers(),
                 state.getBidStatus(),
                 state.getRoundState(),
                 state.getShopsBidCoordinates());

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ArrayOfParticipant>
+<Participant>
+<Id>490b4be8-f72c-47ea-8b70-5e16c389fd5c</Id>
+<Email>palash.roy@rbs.com</Email>
+<Team>Pulsy</Team>
+<Password>testing</Password>
+<RegisteredBy>FM\roypaf</RegisteredBy>
+<RegisteredOn>2015-04-01T10:45:23.8925372Z</RegisteredOn>
+</Participant>
+<Participant>
+<Id>999ac887-fb2c-47f5-9a78-6030d30421ae</Id>
+<Email>not provided</Email>
+<Team>ilianot</Team>
+<Password>sashdshasda</Password>
+<RegisteredBy>System</RegisteredBy>
+<RegisteredOn>2015-04-14 13:46:43.514</RegisteredOn>
+</Participant>
+<Participant>
+<Id>999ac887-fb2c-47f5-9a78-6030d30422ae</Id>
+<Email>not provided</Email>
+<Team>abc</Team>
+<Password>123</Password>
+<RegisteredBy>System</RegisteredBy>
+<RegisteredOn>2015-04-14 13:46:43.514</RegisteredOn>
+</Participant>
+</ArrayOfParticipant>

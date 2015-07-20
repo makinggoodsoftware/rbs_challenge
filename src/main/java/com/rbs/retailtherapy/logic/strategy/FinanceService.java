@@ -3,12 +3,13 @@ package com.rbs.retailtherapy.logic.strategy;
 import com.rbs.retailtherapy.model.Stock;
 import com.rbs.retailtherapy.domain.Customer;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class FinanceService {
-    public Double averageProfits (int numberOfShoppers, List<Customer> typeOfCustomer, List<Stock> stocks){
+    public Double averageProfits (int numberOfShoppers, Collection<Customer> typeOfCustomer, List<Stock> stocks){
         Map<Stock.StockType, Double> profitMargins = calculateMargins(stocks);
         double instanceOfShoppers = ((double)numberOfShoppers) / typeOfCustomer.size();
 

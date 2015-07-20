@@ -13,7 +13,7 @@ class FinanceServiceSpec extends Specification {
         testObj.averageProfits(
                 1,
                 [
-                    new Customer(1, [Stock.StockType.CAMERA], 100.0, [])
+                    new Customer(1, [Stock.StockType.CAMERA], 100.0, [], pathType)
                 ],
                 [
                     new Stock(Stock.StockType.CAMERA, Stock.Classification.CHEAP, 10.0d, 20.0d)

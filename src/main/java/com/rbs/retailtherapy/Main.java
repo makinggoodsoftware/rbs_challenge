@@ -2,6 +2,7 @@ package com.rbs.retailtherapy;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.rbs.retailtherapy.domain.Customer;
 import com.rbs.retailtherapy.domain.FixedSpacingInvestmentConfiguration;
 import com.rbs.retailtherapy.domain.GameState;
 import com.rbs.retailtherapy.domain.InvestmentConfiguration;
@@ -15,6 +16,8 @@ import com.rbs.retailtherapy.logic.manager.GridFactory;
 import com.rbs.retailtherapy.logic.manager.RoundStateFactory;
 import com.rbs.retailtherapy.logic.meta.CustomersLoader;
 import com.rbs.retailtherapy.logic.strategy.*;
+
+import java.util.Map;
 
 public class Main {
     public static void main (String... args){
@@ -36,6 +39,11 @@ public class Main {
                 new FixedSpacingInvestmentConfiguration(0.15, 4)
         );
 
+
+        Gson gson = new GsonBuilder().create();
+        CustomersLoader customersLoader = new CustomersLoader(gson);
+        Map<Integer, Customer> customers = customersLoader.loadCustomersFromCpFileName(customersFileName);
+
         GameState gameState = new GameState(maximumToInvest);
         ParticipantImpl participantImpl = new ParticipantImpl(baseUrl);
         GridFactory gridFactory = new GridFactory();
@@ -47,9 +55,7 @@ public class Main {
         FinanceService financeService = new FinanceService();
         Strategizer strategizer = new Strategizer(financeService, baseInvestmentConfiguration);
         ShopBidder shopBidder = new ShopBidder(investor, potentialShopCellDistributor, strategizer, coordinates);
-        Gson gson = new GsonBuilder().create();
-        CustomersLoader customersLoader = new CustomersLoader(gson);
-        GameManager gameManger = new GameManager(gameState, participantImpl, shopBidder, customersLoader, roundStateFactory, coordinatesSelectors, userName, password, customersFileName);
+        GameManager gameManger = new GameManager(gameState, participantImpl, shopBidder, roundStateFactory, coordinatesSelectors, userName, password, coordinates, customers);
         RoundProvider roundProvider = new RoundProvider(gameManger, gameState);
 
         new GameClock(roundProvider, participantImpl, roundStateFactory).start();

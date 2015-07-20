@@ -13,7 +13,7 @@ public class GameState {
     private final double maximumToInvest;
 
     private double minimumBid;
-    private List<Customer> typeOfShoppers;
+    private Map<Integer, Customer> typeOfShoppers;
 
     public GameState(double maximumToInvest) {
         this.maximumToInvest = maximumToInvest;
@@ -24,7 +24,7 @@ public class GameState {
         return roundMonitors.get(roundStateResponse.getRoundId());
     }
 
-    public List<Customer> getTypeOfShoppers() {
+    public Map<Integer, Customer> getTypeOfShoppers() {
         return typeOfShoppers;
     }
 
@@ -36,7 +36,7 @@ public class GameState {
         this.minimumBid = minimumBid;
     }
 
-    public void setTypeOfShoppers(List<Customer> typeOfShoppers) {
+    public void setTypeOfShoppers(Map<Integer, Customer> typeOfShoppers) {
         this.typeOfShoppers = typeOfShoppers;
     }
 

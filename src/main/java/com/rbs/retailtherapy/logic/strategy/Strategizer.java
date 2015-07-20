@@ -17,7 +17,7 @@ public class Strategizer {
     public ShopBiddingStrategy shopBiddingStrategy(GameState gameState, RoundState roundState) {
         Double averageAvailableProfit = financeService.averageProfits(
                 roundState.getNumberOfShoppers(),
-                gameState.getTypeOfShoppers(),
+                gameState.getTypeOfShoppers().values(),
                 roundState.getStocks()
         );
 
