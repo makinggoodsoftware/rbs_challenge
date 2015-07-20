@@ -7,7 +7,7 @@ import com.rbs.retailtherapy.domain.RoundState;
 import com.rbs.retailtherapy.entity.RoundStateResponse;
 import com.rbs.retailtherapy.entity.ShopResponse;
 import com.rbs.retailtherapy.entity.ShopperResponse;
-import com.rbs.retailtherapy.impl.HttpGameClient;
+import com.rbs.retailtherapy.impl.ParticipantImpl;
 import com.rbs.retailtherapy.model.RoundStateEnum;
 import com.rbs.retailtherapy.model.Stock;
 import com.rbs.retailtherapy.model.StocksPerRound;
@@ -15,11 +15,11 @@ import com.rbs.retailtherapy.model.StocksPerRound;
 import java.util.*;
 
 public class RoundStateFactory {
-    private final HttpGameClient httpGameClient;
+    private final ParticipantImpl participantImpl;
     private final GridFactory gridFactory;
 
-    public RoundStateFactory(HttpGameClient httpGameClient, GridFactory gridFactory) {
-        this.httpGameClient = httpGameClient;
+    public RoundStateFactory(ParticipantImpl participantImpl, GridFactory gridFactory) {
+        this.participantImpl = participantImpl;
         this.gridFactory = gridFactory;
     }
 
@@ -47,7 +47,7 @@ public class RoundStateFactory {
     }
 
     private RoundState firstRoundState(RoundStateResponse newState, Map<Coordinate, ShopResponse> myShops) {
-        StocksPerRound[] stocksPerRound = httpGameClient.getGameParameters().getStocks();
+        StocksPerRound[] stocksPerRound = participantImpl.getGameParameters().getStocks();
         List<Stock> stocks= findStocks (stocksPerRound, newState.getRoundId());
         return new RoundState(
                 true,

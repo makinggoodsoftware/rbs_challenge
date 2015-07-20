@@ -2,10 +2,10 @@ package com.rbs.retailtherapy.logic.clock;
 
 import com.rbs.retailtherapy.client.HttpGameSession;
 import com.rbs.retailtherapy.domain.Coordinate;
+import com.rbs.retailtherapy.domain.RoundState;
 import com.rbs.retailtherapy.entity.RoundStateResponse;
 import com.rbs.retailtherapy.entity.ShopResponse;
-import com.rbs.retailtherapy.impl.HttpGameClient;
-import com.rbs.retailtherapy.domain.RoundState;
+import com.rbs.retailtherapy.impl.ParticipantImpl;
 import com.rbs.retailtherapy.logic.manager.RoundStateFactory;
 
 import java.util.HashMap;
@@ -13,10 +13,10 @@ import java.util.Map;
 
 public class GameClock {
     private final RoundProvider roundProvider;
-    private final HttpGameClient httpGameClient;
+    private final ParticipantImpl httpGameClient;
     private final RoundStateFactory roundStateFactory;
 
-    public GameClock(RoundProvider roundProvider, HttpGameClient httpGameClient, RoundStateFactory roundStateFactory) {
+    public GameClock(RoundProvider roundProvider, ParticipantImpl httpGameClient, RoundStateFactory roundStateFactory) {
         this.roundProvider = roundProvider;
         this.httpGameClient = httpGameClient;
         this.roundStateFactory = roundStateFactory;
