@@ -22,7 +22,7 @@ public class RoundState {
     private final Multimap<Coordinate, ShopperResponse> shoppers;
     private final Map<Coordinate, ShopTracker> shops;
     private final SelfStateResponse selfStateResponse;
-    private final int currentStep;
+    private int currentStep;
 
     private BidStatus bidStatus;
     private RoundStateEnum roundState;
@@ -140,5 +140,9 @@ public class RoundState {
 
     public int getCurrentStep() {
         return currentStep;
+    }
+
+    public void setCurrentStep(int currentStep) {
+        this.currentStep = currentStep;
     }
 }

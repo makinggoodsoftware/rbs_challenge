@@ -50,7 +50,7 @@ public class RoundStateFactory {
                 expectedState.getShopsBidCoordinates(),
                 asMap(newState.getShopOwners(), selfStateResponse),
                 selfStateResponse,
-                expectedState.getCurrentStep() + 1);
+                expectedState.getCurrentStep());
         roundState.setUserTracking(expectedState.getUserTracking());
         return roundState;
     }

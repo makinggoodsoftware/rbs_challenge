@@ -32,6 +32,7 @@ public class RoundMonitor {
                 return roundManager.onFirstTradingStep (currentState, previousState, expectedCurrentState);
             } else {
                 if (! previousState.getShoppers().keySet().equals(currentState.getShoppers().keySet())) {
+                    currentState.setCurrentStep (expectedCurrentState.getCurrentStep() + 1);
                     return roundManager.onTradingStep (currentState, previousState, expectedCurrentState);
                 }
             }
