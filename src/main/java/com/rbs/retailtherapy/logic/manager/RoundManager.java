@@ -113,12 +113,18 @@ public class RoundManager {
     }
 
     private void refreshStock(RoundState currentState) {
+        if (currentState.getSelfStateResponse().getCashInRound() < 1000) return;
         System.out.println("Refreshing stock");
         Stock cheapestStock = cheapest(currentState.getStocks());
         Map<Coordinate, ShopTracker> shops = currentState.getShops();
         for (ShopTracker shopTracker : shops.values()) {
             if (shopTracker.isMine()) {
-                httpGameSession.buyStock(1, shopTracker.getShopResponse(), cheapestStock.getStockType());
+                if (currentState.getCurrentStep() - shopTracker.getStockBoughtOn() > 7){
+                    Coordinate coordinate = Coordinates.from(shopTracker.getShopResponse().getPosition());
+                    System.out.println("Buying stock for shop on: " + coordinate);
+                    httpGameSession.buyStock(1, shopTracker.getShopResponse(), cheapestStock.getStockType());
+                    currentState.getShops().get(coordinate).setStockBoughtOn(currentState.getCurrentStep());
+                }
             }
         }
     }
@@ -184,8 +190,7 @@ public class RoundManager {
             }
         }
         RoundState roundState = trackShoppers(currentState);
-        placeAds(influenceArea, roundState);
-        return roundState;
+        return placeAds(influenceArea, roundState);
     }
 
     private Position positionForShopperWithId(RoundState currentState, int shopperId) {
@@ -218,7 +223,8 @@ public class RoundManager {
         return false;
     }
 
-    private void placeAds(Multimap<Coordinate, AdjacentShop> influenceArea, RoundState roundState) {
+    private RoundState placeAds(Multimap<Coordinate, AdjacentShop> influenceArea, RoundState roundState) {
+        RoundState afterAds = roundStateFactory.copy(roundState);
         for (Map.Entry<Integer, ShopperTracker> shopperTrackingEntries : roundState.getUserTracking().entrySet()) {
             ShopperTracker shopperTracker = shopperTrackingEntries.getValue();
             Map<Orientation, Coordinate> possibleMovements = shopperTracker.getPossibleMovements();
@@ -247,12 +253,14 @@ public class RoundManager {
                                 shop,
                                 stockType
                         );
+                        afterAds.getShops().get(Coordinates.from(shop.getPosition())).setStockBoughtOn (afterAds.getCurrentStep());
                         System.out.println("Ad response was: " + placeAdvertResponse.getIsSuccess() + "[" + placeAdvertResponse.getResponseMessage() + "]");
                         System.out.println("Expecting user with ID " + shopperId + " to step in ad " + coordinate);
                     }
                 }
             }
         }
+        return afterAds;
     }
 
     private Stock.StockType mostLucrative(String[] stocksBought, List<Stock> allStocks) {

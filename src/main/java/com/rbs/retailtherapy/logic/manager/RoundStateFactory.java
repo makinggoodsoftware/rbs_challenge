@@ -48,14 +48,14 @@ public class RoundStateFactory {
                 expectedState.getBidStatus(),
                 newState.getRoundState(),
                 expectedState.getShopsBidCoordinates(),
-                asMap(newState.getShopOwners(), selfStateResponse),
+                asMap(expectedState, newState.getShopOwners(), selfStateResponse),
                 selfStateResponse,
                 expectedState.getCurrentStep());
         roundState.setUserTracking(expectedState.getUserTracking());
         return roundState;
     }
 
-    private Map<Coordinate, ShopTracker> asMap(ShopOwnerResponse[] shopOwners, SelfStateResponse selfStateResponse) {
+    private Map<Coordinate, ShopTracker> asMap(RoundState expectedState, ShopOwnerResponse[] shopOwners, SelfStateResponse selfStateResponse) {
         if (shopOwners == null) return new HashMap<>();
         Map<Coordinate, ShopTracker> asMap = new HashMap<>();
         for (ShopOwnerResponse shopOwner : shopOwners) {
@@ -66,6 +66,12 @@ public class RoundStateFactory {
                     ShopTracker shopTracker;
                     if (isMine) {
                         shopTracker = new ShopTracker(withCoordinate(selfStateResponse.getShops(), coordinate), isMine);
+                        if (expectedState != null){
+                            ShopTracker previousTracker = expectedState.getShops().get(coordinate);
+                            if (previousTracker != null){
+                                shopTracker.setStockBoughtOn(previousTracker.getStockBoughtOn());
+                            }
+                        }
                     } else {
                         shopTracker = new ShopTracker(shopResponse, isMine);
                     }
@@ -100,7 +106,7 @@ public class RoundStateFactory {
                 BidStatus.NOT_BID,
                 newState.getRoundState(),
                 new HashSet<Coordinate>(),
-                asMap(newState.getShopOwners(), selfStateResponse),
+                asMap(null, newState.getShopOwners(), selfStateResponse),
                 selfStateResponse,
                 1);
 
@@ -141,7 +147,7 @@ public class RoundStateFactory {
                 state.getShops(),
                 state.getSelfStateResponse(),
                 state.getCurrentStep());
-        
+
         roundState.setUserTracking(state.getUserTracking());
         return roundState;
     }
