@@ -66,15 +66,15 @@ public class RoundManager {
 
         for (Coordinate shopBidCoordinate : previousShopBids) {
             Cell cell = currentState.getGrid().getCell(shopBidCoordinate);
-            if (cell.getType() == CellStatus.Shop){
-                if (cell.isMine()){
+            if (cell.getType() == CellStatus.Shop) {
+                if (cell.isMine()) {
                     System.out.println("GOT A NEW SHOP in " + shopBidCoordinate);
-                    adjudicatedShopBids.put(shopBidCoordinate, currentState.getShops().get(shopBidCoordinate).getShopResponse() );
+                    adjudicatedShopBids.put(shopBidCoordinate, currentState.getShops().get(shopBidCoordinate).getShopResponse());
                 } else {
                     System.out.printf("SHOP stolen! in " + shopBidCoordinate);
                     stolenShopBids.add(shopBidCoordinate);
                 }
-            } else if (cell.getType() == CellStatus.AllocatedForShop){
+            } else if (cell.getType() == CellStatus.AllocatedForShop) {
                 thisShopBids.add(shopBidCoordinate);
             } else {
                 System.out.println("=============");
@@ -106,7 +106,7 @@ public class RoundManager {
     }
 
     public RoundState onTradingStep(RoundState currentState, RoundState previousState, RoundState expectedCurrentState) {
-        if (currentState.getCurrentStep() % 7 == 0){
+        if (currentState.getCurrentStep() % 7 == 0) {
             refreshStock(currentState);
         }
         return handleShoppers(currentState, previousState, expectedCurrentState, influenceArea(currentState.getShops()));
@@ -117,7 +117,7 @@ public class RoundManager {
         Stock cheapestStock = cheapest(currentState.getStocks());
         Map<Coordinate, ShopTracker> shops = currentState.getShops();
         for (ShopTracker shopTracker : shops.values()) {
-            if (shopTracker.isMine()){
+            if (shopTracker.isMine()) {
                 httpGameSession.buyStock(1, shopTracker.getShopResponse(), cheapestStock.getStockType());
             }
         }
@@ -126,7 +126,7 @@ public class RoundManager {
     private Stock cheapest(List<Stock> stocks) {
         Stock cheapestStock = stocks.get(0);
         for (Stock stock : stocks) {
-            if (stock.getWholesalePrice() < cheapestStock.getWholesalePrice()){
+            if (stock.getWholesalePrice() < cheapestStock.getWholesalePrice()) {
                 cheapestStock = stock;
             }
         }
@@ -136,7 +136,7 @@ public class RoundManager {
     private Stock mostLucrative(List<Stock> stocks) {
         Stock mostLucrative = stocks.get(0);
         for (Stock stock : stocks) {
-            if ((stock.getWholesalePrice() / stock.getRetailPrice())  > (mostLucrative.getWholesalePrice() / mostLucrative.getRetailPrice())){
+            if ((stock.getWholesalePrice() / stock.getRetailPrice()) > (mostLucrative.getWholesalePrice() / mostLucrative.getRetailPrice())) {
                 mostLucrative = stock;
             }
         }
@@ -147,7 +147,7 @@ public class RoundManager {
         Multimap<Coordinate, AdjacentShop> influenceArea = ArrayListMultimap.create();
         for (Map.Entry<Coordinate, ShopTracker> myShopTrackerEntry : allShops.entrySet()) {
             ShopTracker shopTracker = myShopTrackerEntry.getValue();
-            if (shopTracker.isMine()){
+            if (shopTracker.isMine()) {
                 ShopResponse shop = shopTracker.getShopResponse();
                 Position shopPosition = shop.getPosition();
                 influenceArea.put(developCoordinate(shopPosition, Orientation.NORTH), new AdjacentShop(Orientation.NORTH, shop));
@@ -162,24 +162,24 @@ public class RoundManager {
     private RoundState handleShoppers(RoundState currentState, RoundState previousState, RoundState expectedRoundState, Multimap<Coordinate, AdjacentShop> influenceArea) {
         System.out.println("Cash in round: " + currentState.getSelfStateResponse().getCashInRound());
         System.out.println("Cash in game: " + currentState.getSelfStateResponse().getCashInGame());
-        if (expectedRoundState != null){
+        if (expectedRoundState != null) {
             for (ShopperTracker expectedUserTracking : expectedRoundState.getUserTracking().values()) {
                 int shopperId = expectedUserTracking.getShopper().getShopperId();
                 Coordinate matchingCoordinate = movementSatisfied(currentState, expectedUserTracking);
+                Position currentPosision = positionForShopperWithId(currentState, shopperId);
                 if (matchingCoordinate != null) {
                     System.out.println("Shopper " + expectedUserTracking.getShopper().getShopperId() + "  was found where expected: " + matchingCoordinate + " successess: " + expectedUserTracking.getSuccessHits() + " failures: " + expectedUserTracking.getFailureHits());
-                    expectedUserTracking.setSuccessHits(expectedUserTracking.getSuccessHits () + 1);
+                    expectedUserTracking.setSuccessHits(expectedUserTracking.getSuccessHits() + 1);
                 } else {
-                    Position currentPosision = positionForShopperWithId(currentState, shopperId);
-                    System.out.println("Shopper " + shopperId + "  not found where expected! Instead it was in: " + currentPosision);
-                    Coordinate starts = from(positionForShopperWithId(previousState, shopperId));
-                    Coordinate ends = from(currentPosision);
-                    Direction direction = Coordinates.guessDirection(starts, ends);
-                    Orientation orientation = Coordinates.orientation(direction, Arrays.asList(starts, ends));
-                    System.out.println("This user seems to be following " + orientation);
-                    expectedUserTracking.setLatestHint(orientation);
-                    expectedUserTracking.setFailureHits(expectedUserTracking.getFailureHits () + 1);
+                    System.out.println("Shopper " + shopperId + "  not found where expected! Instead it was in: " + Coordinates.from(currentPosision));
+                    expectedUserTracking.setFailureHits(expectedUserTracking.getFailureHits() + 1);
                 }
+                Coordinate starts = from(positionForShopperWithId(previousState, shopperId));
+                Coordinate ends = from(currentPosision);
+                Direction direction = Coordinates.guessDirection(starts, ends);
+                Orientation orientation = Coordinates.orientation(direction, Arrays.asList(starts, ends));
+                System.out.println("This user seems to be following " + orientation);
+                expectedUserTracking.setLatestHint(orientation);
                 currentState.getUserTracking().put(shopperId, expectedUserTracking);
             }
         }
@@ -192,7 +192,7 @@ public class RoundManager {
         Position currentPosision = null;
         Multimap<Coordinate, ShopperResponse> shoppers = currentState.getShoppers();
         for (ShopperResponse shopperResponse : shoppers.values()) {
-            if (shopperResponse.getShopperId() == shopperId){
+            if (shopperResponse.getShopperId() == shopperId) {
                 currentPosision = shopperResponse.getCurrentPosition();
             }
         }
@@ -203,7 +203,7 @@ public class RoundManager {
         Collection<Coordinate> expectedMovements = expectedUserTracking.getPossibleMovements().values();
         for (Coordinate expectedMovement : expectedMovements) {
             Collection<ShopperResponse> shopperResponses = currentState.getShoppers().get(expectedMovement);
-            if (isShopperInCollectionById (expectedUserTracking.getShopper(), shopperResponses)){
+            if (isShopperInCollectionById(expectedUserTracking.getShopper(), shopperResponses)) {
                 return expectedMovement;
             }
         }
@@ -222,12 +222,13 @@ public class RoundManager {
         for (Map.Entry<Integer, ShopperTracker> shopperTrackingEntries : roundState.getUserTracking().entrySet()) {
             ShopperTracker shopperTracker = shopperTrackingEntries.getValue();
             Map<Orientation, Coordinate> possibleMovements = shopperTracker.getPossibleMovements();
-            if (possibleMovements.size() == 1){
+            if (possibleMovements.size() == 1) {
                 Coordinate coordinate = possibleMovements.values().iterator().next();
                 Collection<AdjacentShop> adjacentShops = influenceArea.get(coordinate);
-                if (adjacentShops != null && adjacentShops.size() > 0){
-                    if (shopperTracker.getSuccessHits() > 2 && ((shopperTracker.getFailureHits() == 0) || (shopperTracker.getSuccessHits() / shopperTracker.getFailureHits()) > 2)) {
-                        System.out.println("Shopper with ID: " + shopperTracker.getShopper().getShopperId() + " is possibly going to be in: " + coordinate);
+                if (adjacentShops != null && adjacentShops.size() > 0) {
+                    if (shopperTracker.getSuccessHits() > 2 && ((shopperTracker.getFailureHits() == 0) || (shopperTracker.getSuccessHits() / shopperTracker.getFailureHits()) > 1)) {
+                        int shopperId = shopperTracker.getShopper().getShopperId();
+                        System.out.println("Shopper with ID: " + shopperId + " is possibly going to be in: " + coordinate);
                         System.out.println("Shopper can be intercepted! Planting an Ad");
                         AdjacentShop adjacentShop = adjacentShops.iterator().next();
                         Stock.StockType stockType = mostLucrative(shopperTracker.getShopper().getStocks(), roundState.getStocks());
@@ -237,7 +238,7 @@ public class RoundManager {
                         int toBuy = 1;
                         for (Stock stock : roundState.getStocks()) {
                             if (stock.getStockType() == stockType) {
-                                toBuy = toSpend.intValue() / ((Double)stock.getWholesalePrice()).intValue();
+                                toBuy = toSpend.intValue() / ((Double) stock.getWholesalePrice()).intValue();
                             }
                         }
                         httpGameSession.buyStock(toBuy, shop, stockType);
@@ -247,6 +248,7 @@ public class RoundManager {
                                 stockType
                         );
                         System.out.println("Ad response was: " + placeAdvertResponse.getIsSuccess() + "[" + placeAdvertResponse.getResponseMessage() + "]");
+                        System.out.println("Expecting user with ID " + shopperId + " to step in ad " + coordinate);
                     }
                 }
             }
@@ -258,7 +260,7 @@ public class RoundManager {
         List<Stock> boughtByCustomer = new ArrayList<>();
         for (Stock stock : allStocks) {
             for (String toBuy : stocksBought) {
-                if (stock.getStockType().name().equals(toBuy)){
+                if (stock.getStockType().name().equals(toBuy)) {
                     boughtByCustomer.add(stock);
                     break;
                 }
@@ -276,17 +278,17 @@ public class RoundManager {
             Collection<ShopperResponse> shoppersInSameCoordinate = coordinateShopperResponseEntry.getValue();
             for (ShopperResponse shopper : shoppersInSameCoordinate) {
                 ShopperTracker currentTracking = currentState.getUserTracking().get(shopper.getShopperId());
-                if (currentTracking != null && currentTracking.getLatestHint() != null){
+                if (currentTracking != null && currentTracking.getLatestHint() != null) {
                     Map<Orientation, Coordinate> hintedMovement = new HashMap<>();
                     hintedMovement.put(currentTracking.getLatestHint(), developCoordinate(shopper.getCurrentPosition(), currentTracking.getLatestHint()));
                     ShopperTracker hintedShopperTracker = new ShopperTracker(shopper.getCurrentPosition(), hintedMovement, currentState.getCustomer(shopper.getShopperId()), shopper);
                     hintedShopperTracker.setFailureHits(currentTracking.getFailureHits());
                     hintedShopperTracker.setSuccessHits(currentTracking.getSuccessHits());
                     shopperTrackers.put(shopper.getShopperId(), hintedShopperTracker);
-                }else{
-                    System.out.println("Shopper " +  shopper.getShopperId() + " in: " + coordinate);
+                } else {
+                    System.out.println("Shopper " + shopper.getShopperId() + " in: " + coordinate);
                     ShopperTracker nextMovement = guessFirstMovement(currentState, shopper);
-                    if (currentTracking != null){
+                    if (currentTracking != null) {
                         nextMovement.setFailureHits(currentTracking.getFailureHits());
                         nextMovement.setSuccessHits(currentTracking.getSuccessHits());
                     }
@@ -294,7 +296,7 @@ public class RoundManager {
                 }
             }
         }
-        afterTrackingShoppers.setUserTracking (shopperTrackers);
+        afterTrackingShoppers.setUserTracking(shopperTrackers);
         return afterTrackingShoppers;
     }
 
@@ -303,17 +305,17 @@ public class RoundManager {
         int shopperId = shopper.getShopperId();
         Customer customer = currentState.getCustomer(shopperId);
         Path firstPath = customer.getPathType().getPaths().get(0);
-        List<Orientation> possibleOrientations = guessPossibleOrientations (currentState.getDimension(), currentPosition, firstPath);
+        List<Orientation> possibleOrientations = guessPossibleOrientations(currentState.getDimension(), currentPosition, firstPath);
         Map<Orientation, Coordinate> possibleMovements = new HashMap<>();
         for (Orientation possibleOrientation : possibleOrientations) {
-            Coordinate possibleMovement = developCoordinate (currentPosition, possibleOrientation);
+            Coordinate possibleMovement = developCoordinate(currentPosition, possibleOrientation);
             possibleMovements.put(possibleOrientation, possibleMovement);
         }
         return new ShopperTracker(currentPosition, possibleMovements, customer, shopper);
     }
 
     private Coordinate developCoordinate(Position currentPosition, Orientation possibleOrientation) {
-        switch (possibleOrientation){
+        switch (possibleOrientation) {
             case EAST:
                 return delta(currentPosition, 1, 0);
             case WEST:
@@ -339,25 +341,30 @@ public class RoundManager {
     }
 
     private List<Orientation> guessPossibleOrientations(Dimension dimension, Position position, Path path) {
-        if (path.getDirection() == Direction.HORIZONTAL){
+        if (path.getDirection() == Direction.HORIZONTAL) {
             if (position.getCol() == 0) return singletonList(Orientation.EAST);
             if (position.getCol() == dimension.getCols() - 1) return singletonList(Orientation.WEST);
             return asList(Orientation.EAST, Orientation.WEST);
         }
-        if (path.getDirection() == Direction.VERTICAL){
+        if (path.getDirection() == Direction.VERTICAL) {
             if (position.getRow() == 0) return singletonList(Orientation.NORTH);
             if (position.getRow() == dimension.getRows() - 1) return singletonList(Orientation.SOUTH);
             return asList(Orientation.NORTH, Orientation.SOUTH);
         }
-        if (path.getDirection() == Direction.DIAGONAL){
+        if (path.getDirection() == Direction.DIAGONAL) {
             if (position.getRow() == 0 && position.getCol() == 0) return singletonList(Orientation.NORTH_EAST);
-            if (position.getRow() == 0 && position.getCol() == dimension.getCols() - 1) return singletonList(Orientation.NORTH_WEST);
-            if (position.getRow() == dimension.getRows() - 1 && position.getCol() == 0) return singletonList(Orientation.SOUTH_EAST);
-            if (position.getRow() == dimension.getRows() - 1 && position.getCol() == dimension.getCols() - 1) return singletonList(Orientation.SOUTH_WEST);
+            if (position.getRow() == 0 && position.getCol() == dimension.getCols() - 1)
+                return singletonList(Orientation.NORTH_WEST);
+            if (position.getRow() == dimension.getRows() - 1 && position.getCol() == 0)
+                return singletonList(Orientation.SOUTH_EAST);
+            if (position.getRow() == dimension.getRows() - 1 && position.getCol() == dimension.getCols() - 1)
+                return singletonList(Orientation.SOUTH_WEST);
             if (position.getRow() == 0) return asList(Orientation.NORTH_EAST, Orientation.NORTH_WEST);
-            if (position.getRow() == dimension.getRows() - 1) return asList(Orientation.SOUTH_WEST, Orientation.SOUTH_EAST);
+            if (position.getRow() == dimension.getRows() - 1)
+                return asList(Orientation.SOUTH_WEST, Orientation.SOUTH_EAST);
             if (position.getCol() == 0) return asList(Orientation.NORTH_EAST, Orientation.SOUTH_EAST);
-            if (position.getCol() == dimension.getCols() - 1) return asList(Orientation.SOUTH_WEST, Orientation.NORTH_WEST);
+            if (position.getCol() == dimension.getCols() - 1)
+                return asList(Orientation.SOUTH_WEST, Orientation.NORTH_WEST);
             return asList(Orientation.NORTH_EAST, Orientation.NORTH_WEST, Orientation.SOUTH_EAST, Orientation.SOUTH_WEST);
         }
         return null;
