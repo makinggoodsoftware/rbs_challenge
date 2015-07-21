@@ -114,19 +114,33 @@ public class RoundManager {
 
     private void refreshStock(RoundState currentState) {
         System.out.println("Refreshing stock");
-        List<Stock> stocks = currentState.getStocks();
-        Stock cheapestStock = stocks.get(0);
-        for (Stock stock : stocks) {
-            if (stock.getWholesalePrice() < cheapestStock.getWholesalePrice()){
-                cheapestStock = stock;
-            }
-        }
+        Stock cheapestStock = cheapest(currentState.getStocks());
         Map<Coordinate, ShopTracker> shops = currentState.getShops();
         for (ShopTracker shopTracker : shops.values()) {
             if (shopTracker.isMine()){
                 httpGameSession.buyStock(1, shopTracker.getShopResponse(), cheapestStock.getStockType());
             }
         }
+    }
+
+    private Stock cheapest(List<Stock> stocks) {
+        Stock cheapestStock = stocks.get(0);
+        for (Stock stock : stocks) {
+            if (stock.getWholesalePrice() < cheapestStock.getWholesalePrice()){
+                cheapestStock = stock;
+            }
+        }
+        return cheapestStock;
+    }
+
+    private Stock mostLucrative(List<Stock> stocks) {
+        Stock mostLucrative = stocks.get(0);
+        for (Stock stock : stocks) {
+            if ((stock.getWholesalePrice() / stock.getRetailPrice())  > (mostLucrative.getWholesalePrice() / mostLucrative.getRetailPrice())){
+                mostLucrative = stock;
+            }
+        }
+        return mostLucrative;
     }
 
     private Multimap<Coordinate, AdjacentShop> influenceArea(Map<Coordinate, ShopTracker> allShops) {
@@ -210,29 +224,45 @@ public class RoundManager {
                 Coordinate coordinate = possibleMovements.values().iterator().next();
                 Collection<AdjacentShop> adjacentShops = influenceArea.get(coordinate);
                 if (adjacentShops != null && adjacentShops.size() > 0){
-                    System.out.println("Shopper with ID: " + shopperTracker.getShopper().getShopperId() + " is possibly going to be in: " + coordinate);
-                    System.out.println("Shopper can be intercepted! Planting an Ad");
-                    AdjacentShop adjacentShop = adjacentShops.iterator().next();
-                    Stock.StockType stockType = Stock.StockType.valueOf(shopperTracker.getShopper().getStocks()[0]);
-                    ShopResponse shop = adjacentShop.getShop();
-                    double cashInRound = roundState.getSelfStateResponse().getCashInRound();
-                    Double toSpend = cashInRound / 10;
-                    int toBuy = 1;
-                    for (Stock stock : roundState.getStocks()) {
-                        if (stock.getStockType() == stockType) {
-                            toBuy = toSpend.intValue() / ((Double)stock.getWholesalePrice()).intValue();
+                    if (shopperTracker.getCustomer().getPathType().getPaths().size() < 1000) {
+                        System.out.println("Shopper with ID: " + shopperTracker.getShopper().getShopperId() + " is possibly going to be in: " + coordinate);
+                        System.out.println("Shopper can be intercepted! Planting an Ad");
+                        AdjacentShop adjacentShop = adjacentShops.iterator().next();
+                        Stock.StockType stockType = mostLucrative(shopperTracker.getShopper().getStocks(), roundState.getStocks());
+                        ShopResponse shop = adjacentShop.getShop();
+                        double cashInRound = roundState.getSelfStateResponse().getCashInRound();
+                        Double toSpend = cashInRound / 15;
+                        int toBuy = 1;
+                        for (Stock stock : roundState.getStocks()) {
+                            if (stock.getStockType() == stockType) {
+                                toBuy = toSpend.intValue() / ((Double)stock.getWholesalePrice()).intValue();
+                            }
                         }
+                        httpGameSession.buyStock(toBuy, shop, stockType);
+                        PlaceAdvertResponse placeAdvertResponse = httpGameSession.placeAdvert(
+                                adjacentShop.getOrientation().asDirection(),
+                                shop,
+                                stockType
+                        );
+                        System.out.println("Ad response was: " + placeAdvertResponse.getIsSuccess() + "[" + placeAdvertResponse.getResponseMessage() + "]");
                     }
-                    httpGameSession.buyStock(toBuy, shop, stockType);
-                    PlaceAdvertResponse placeAdvertResponse = httpGameSession.placeAdvert(
-                            adjacentShop.getOrientation().asDirection(),
-                            shop,
-                            stockType
-                    );
-                    System.out.println("Ad response was: " + placeAdvertResponse.getIsSuccess() + "[" + placeAdvertResponse.getResponseMessage() + "]");
                 }
             }
         }
+    }
+
+    private Stock.StockType mostLucrative(String[] stocksBought, List<Stock> allStocks) {
+
+        List<Stock> boughtByCustomer = new ArrayList<>();
+        for (Stock stock : allStocks) {
+            for (String toBuy : stocksBought) {
+                if (stock.getStockType().name().equals(toBuy)){
+                    boughtByCustomer.add(stock);
+                    break;
+                }
+            }
+        }
+        return mostLucrative(boughtByCustomer).getStockType();
     }
 
     private RoundState trackShoppers(RoundState currentState) {
@@ -247,7 +277,7 @@ public class RoundManager {
                 if (currentTracking != null && currentTracking.getLatestHint() != null){
                     Map<Orientation, Coordinate> hintedMovement = new HashMap<>();
                     hintedMovement.put(currentTracking.getLatestHint(), developCoordinate(shopper.getCurrentPosition(), currentTracking.getLatestHint()));
-                    shopperTrackers.put(shopper.getShopperId(), new ShopperTracker(shopper.getCurrentPosition(), hintedMovement, shopper));
+                    shopperTrackers.put(shopper.getShopperId(), new ShopperTracker(shopper.getCurrentPosition(), hintedMovement, currentState.getCustomer(shopper.getShopperId()), shopper));
                 }else{
                     System.out.println("Shopper " +  shopper.getShopperId() + " in: " + coordinate);
                     ShopperTracker nextMovement = guessFirstMovement(currentState, shopper);
@@ -270,7 +300,7 @@ public class RoundManager {
             Coordinate possibleMovement = developCoordinate (currentPosition, possibleOrientation);
             possibleMovements.put(possibleOrientation, possibleMovement);
         }
-        return new ShopperTracker(currentPosition, possibleMovements, shopper);
+        return new ShopperTracker(currentPosition, possibleMovements, customer, shopper);
     }
 
     private Coordinate developCoordinate(Position currentPosition, Orientation possibleOrientation) {
