@@ -16,6 +16,7 @@ import com.rbs.retailtherapy.logic.strategy.ShopBidder;
 import com.rbs.retailtherapy.model.CellStatus;
 import com.rbs.retailtherapy.model.Position;
 import com.rbs.retailtherapy.model.Stock;
+import com.rbs.retailtherapy.model.StockEntry;
 
 import java.util.*;
 
@@ -44,12 +45,12 @@ public class RoundManager {
 
     public RoundState onBiddingOpened(RoundState currentState) {
         RoundState afterBidding = roundStateFactory.copy(currentState);
-        System.out.println("BIDDING OPENED!!");
+//        System.out.println("BIDDING OPENED!!");
         Set<Coordinate> shopsBidsCoordinates = new HashSet<>();
         List<Bid> bids = shopBidder.bid(gameState, currentState);
         for (Bid bid : bids) {
             RequestShopResponse requestShopResponse = httpGameSession.requestShop(bid.getBidAmount(), bid.getCoordinate().getCol(), bid.getCoordinate().getRow());
-            System.out.println("Requesting shop in " + bid.getCoordinate() + " result is: " + requestShopResponse.getIsSuccess());
+//            System.out.println("Requesting shop in " + bid.getCoordinate() + " result is: " + requestShopResponse.getIsSuccess());
             shopsBidsCoordinates.add(bid.getCoordinate());
         }
         afterBidding.setBidStatus(BidStatus.BID_SENT);
@@ -101,7 +102,7 @@ public class RoundManager {
     }
 
     public RoundState onFirstTradingStep(RoundState currentState, RoundState previousState, RoundState expectedCurrentState) {
-        System.out.println("TRADING JUST OPENED");
+//        System.out.println("TRADING JUST OPENED");
         return handleShoppers(currentState, previousState, expectedCurrentState, influenceArea(currentState.getShops()));
     }
 
@@ -114,14 +115,14 @@ public class RoundManager {
 
     private void refreshStock(RoundState currentState) {
         if (currentState.getSelfStateResponse().getCashInRound() < 1000) return;
-        System.out.println("Refreshing stock");
+//        System.out.println("Refreshing stock");
         Stock cheapestStock = cheapest(currentState.getStocks());
         Map<Coordinate, ShopTracker> shops = currentState.getShops();
         for (ShopTracker shopTracker : shops.values()) {
             if (shopTracker.isMine()) {
-                if (currentState.getCurrentStep() - shopTracker.getStockBoughtOn() > 7){
+                if (currentState.getCurrentStep() - shopTracker.getStockBoughtOn() > 7) {
                     Coordinate coordinate = Coordinates.from(shopTracker.getShopResponse().getPosition());
-                    System.out.println("Buying stock for shop on: " + coordinate);
+//                    System.out.println("Buying stock for shop on: " + coordinate);
                     httpGameSession.buyStock(1, shopTracker.getShopResponse(), cheapestStock.getStockType());
                     currentState.getShops().get(coordinate).setStockBoughtOn(currentState.getCurrentStep());
                 }
@@ -142,7 +143,7 @@ public class RoundManager {
     private Stock mostLucrative(List<Stock> stocks) {
         Stock mostLucrative = stocks.get(0);
         for (Stock stock : stocks) {
-            if ((stock.getWholesalePrice() / stock.getRetailPrice()) > (mostLucrative.getWholesalePrice() / mostLucrative.getRetailPrice())) {
+            if ((stock.getWholesalePrice() / stock.getRetailPrice()) < (mostLucrative.getWholesalePrice() / mostLucrative.getRetailPrice())) {
                 mostLucrative = stock;
             }
         }
@@ -167,41 +168,45 @@ public class RoundManager {
 
     private RoundState handleShoppers(RoundState currentState, RoundState previousState, RoundState expectedRoundState, Multimap<Coordinate, AdjacentShop> influenceArea) {
         System.out.println("Cash in round: " + currentState.getSelfStateResponse().getCashInRound());
-        System.out.println("Cash in game: " + currentState.getSelfStateResponse().getCashInGame());
+//        System.out.println("Cash in game: " + currentState.getSelfStateResponse().getCashInGame());
         if (expectedRoundState != null) {
             for (ShopperTracker expectedUserTracking : expectedRoundState.getUserTracking().values()) {
                 int shopperId = expectedUserTracking.getShopper().getShopperId();
                 Coordinate matchingCoordinate = movementSatisfied(currentState, expectedUserTracking);
-                Position currentPosision = positionForShopperWithId(currentState, shopperId);
+                ShopperResponse shopper = shopperWithId(currentState, shopperId);
+                if (shopper == null) break;
                 if (matchingCoordinate != null) {
-                    System.out.println("Shopper " + expectedUserTracking.getShopper().getShopperId() + "  was found where expected: " + matchingCoordinate + " successess: " + expectedUserTracking.getSuccessHits() + " failures: " + expectedUserTracking.getFailureHits());
+//                    System.out.println("Shopper " + expectedUserTracking.getShopper().getShopperId() + "  was found where expected: " + matchingCoordinate + " successess: " + expectedUserTracking.getSuccessHits() + " failures: " + expectedUserTracking.getFailureHits());
                     expectedUserTracking.setSuccessHits(expectedUserTracking.getSuccessHits() + 1);
                 } else {
-                    System.out.println("Shopper " + shopperId + "  not found where expected! Instead it was in: " + Coordinates.from(currentPosision));
+//                    System.out.println("Shopper " + shopperId + "  not found where expected! Instead it was in: " + Coordinates.from(shopper.getCurrentPosition()));
                     expectedUserTracking.setFailureHits(expectedUserTracking.getFailureHits() + 1);
                 }
-                Coordinate starts = from(positionForShopperWithId(previousState, shopperId));
-                Coordinate ends = from(currentPosision);
-                Direction direction = Coordinates.guessDirection(starts, ends);
-                Orientation orientation = Coordinates.orientation(direction, Arrays.asList(starts, ends));
-                System.out.println("This user seems to be following " + orientation);
-                expectedUserTracking.setLatestHint(orientation);
-                currentState.getUserTracking().put(shopperId, expectedUserTracking);
+//                System.out.println("Cash left: " + shopper.getCashRemaining());
+                ShopperResponse previousShopper = shopperWithId(previousState, shopperId);
+                if (previousShopper != null) {
+                    Coordinate starts = from(previousShopper.getCurrentPosition());
+                    Coordinate ends = from(shopper.getCurrentPosition());
+                    Direction direction = Coordinates.guessDirection(starts, ends);
+                    Orientation orientation = Coordinates.orientation(direction, Arrays.asList(starts, ends));
+//                    System.out.println("This user seems to be following " + orientation);
+                    expectedUserTracking.setLatestHint(orientation);
+                    currentState.getUserTracking().put(shopperId, expectedUserTracking);
+                }
             }
         }
         RoundState roundState = trackShoppers(currentState);
         return placeAds(influenceArea, roundState);
     }
 
-    private Position positionForShopperWithId(RoundState currentState, int shopperId) {
-        Position currentPosision = null;
+    private ShopperResponse shopperWithId(RoundState currentState, int shopperId) {
         Multimap<Coordinate, ShopperResponse> shoppers = currentState.getShoppers();
         for (ShopperResponse shopperResponse : shoppers.values()) {
             if (shopperResponse.getShopperId() == shopperId) {
-                currentPosision = shopperResponse.getCurrentPosition();
+                return shopperResponse;
             }
         }
-        return currentPosision;
+        return null;
     }
 
     private Coordinate movementSatisfied(RoundState currentState, ShopperTracker expectedUserTracking) {
@@ -234,28 +239,46 @@ public class RoundManager {
                 if (adjacentShops != null && adjacentShops.size() > 0) {
                     if (shopperTracker.getSuccessHits() > 2 && ((shopperTracker.getFailureHits() == 0) || (shopperTracker.getSuccessHits() / shopperTracker.getFailureHits()) > 1)) {
                         int shopperId = shopperTracker.getShopper().getShopperId();
-                        System.out.println("Shopper with ID: " + shopperId + " is possibly going to be in: " + coordinate);
-                        System.out.println("Shopper can be intercepted! Planting an Ad");
+//                        System.out.println("Shopper with ID: " + shopperId + " is possibly going to be in: " + coordinate);
+//                        System.out.println("Shopper can be intercepted! Planting an Ad");
                         AdjacentShop adjacentShop = adjacentShops.iterator().next();
                         Stock.StockType stockType = mostLucrative(shopperTracker.getShopper().getStocks(), roundState.getStocks());
                         ShopResponse shop = adjacentShop.getShop();
                         double cashInRound = roundState.getSelfStateResponse().getCashInRound();
-                        Double toSpend = cashInRound / 15;
-                        int toBuy = 1;
+                        Double toSpend = cashInRound / 10;
+                        if (shopperTracker.getShopper().getCashRemaining() < toSpend) {
+                            toSpend = shopperTracker.getShopper().getCashRemaining();
+                        }
+                        int toBuy = 0;
                         for (Stock stock : roundState.getStocks()) {
                             if (stock.getStockType() == stockType) {
                                 toBuy = toSpend.intValue() / ((Double) stock.getWholesalePrice()).intValue();
                             }
                         }
-                        httpGameSession.buyStock(toBuy, shop, stockType);
-                        PlaceAdvertResponse placeAdvertResponse = httpGameSession.placeAdvert(
-                                adjacentShop.getOrientation().asDirection(),
-                                shop,
-                                stockType
-                        );
-                        afterAds.getShops().get(Coordinates.from(shop.getPosition())).setStockBoughtOn (afterAds.getCurrentStep());
-                        System.out.println("Ad response was: " + placeAdvertResponse.getIsSuccess() + "[" + placeAdvertResponse.getResponseMessage() + "]");
-                        System.out.println("Expecting user with ID " + shopperId + " to step in ad " + coordinate);
+                        if (toBuy > 1 && (toSpend > (roundState.getAdPrice() * 3))) {
+                            StockEntry[] allStockShelf = shop.getStockShelf();
+                            if (allStockShelf != null){
+                                for (StockEntry stockEntry : allStockShelf) {
+                                    if (stockEntry.getStockType().equals(stockType)) {
+                                        toBuy = toBuy - stockEntry.getQuantity();
+                                    }
+                                }
+                            }
+
+                            if (toBuy > 0){
+                                httpGameSession.buyStock(toBuy, shop, stockType);
+                            }
+                            PlaceAdvertResponse placeAdvertResponse = httpGameSession.placeAdvert(
+                                    adjacentShop.getOrientation().asDirection(),
+                                    shop,
+                                    stockType
+                            );
+                            afterAds.getShops().get(Coordinates.from(shop.getPosition())).setStockBoughtOn(afterAds.getCurrentStep());
+//                            System.out.println("Ad response was: " + placeAdvertResponse.getIsSuccess() + "[" + placeAdvertResponse.getResponseMessage() + "]");
+//                            System.out.println("Expecting user with ID " + shopperId + " to step in ad " + coordinate + " money spent: " + toSpend + " stock " + stockType);
+                        } else {
+//                            System.out.println("Not worth the ad!");
+                        }
                     }
                 }
             }
@@ -294,7 +317,7 @@ public class RoundManager {
                     hintedShopperTracker.setSuccessHits(currentTracking.getSuccessHits());
                     shopperTrackers.put(shopper.getShopperId(), hintedShopperTracker);
                 } else {
-                    System.out.println("Shopper " + shopper.getShopperId() + " in: " + coordinate);
+//                    System.out.println("Shopper " + shopper.getShopperId() + " in: " + coordinate);
                     ShopperTracker nextMovement = guessFirstMovement(currentState, shopper);
                     if (currentTracking != null) {
                         nextMovement.setFailureHits(currentTracking.getFailureHits());

@@ -50,7 +50,8 @@ public class RoundStateFactory {
                 expectedState.getShopsBidCoordinates(),
                 asMap(expectedState, newState.getShopOwners(), selfStateResponse),
                 selfStateResponse,
-                expectedState.getCurrentStep());
+                expectedState.getCurrentStep(),
+                expectedState.getAdPrice());
         roundState.setUserTracking(expectedState.getUserTracking());
         return roundState;
     }
@@ -108,7 +109,8 @@ public class RoundStateFactory {
                 new HashSet<Coordinate>(),
                 asMap(null, newState.getShopOwners(), selfStateResponse),
                 selfStateResponse,
-                1);
+                1,
+                newState.getRoundParameters().getAdvertPrice());
 
     }
 
@@ -146,7 +148,8 @@ public class RoundStateFactory {
                 state.getShopsBidCoordinates(),
                 state.getShops(),
                 state.getSelfStateResponse(),
-                state.getCurrentStep());
+                state.getCurrentStep(),
+                state.getAdPrice());
 
         roundState.setUserTracking(state.getUserTracking());
         return roundState;

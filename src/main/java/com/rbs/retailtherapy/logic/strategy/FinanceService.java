@@ -26,7 +26,7 @@ public class FinanceService {
         double customerProfit = 0d;
         for (Stock.StockType stockType : customer.getShoppingList()) {
             Double profitMargin = profitMargins.get(stockType);
-            System.out.println("Looking up profits for: " + customer.getId() + " item: " +stockType);
+//            System.out.println("Looking up profits for: " + customer.getId() + " item: " +stockType);
             Double initialCash = customer.getInitialCash();
             int size = customer.getShoppingList().size();
             Double profitItemType = profitMargin * initialCash / size;
