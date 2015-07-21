@@ -31,9 +31,9 @@ public class Main {
         InvestmentConfiguration baseInvestmentConfiguration = new InvestmentConfiguration(
                 0.8,
                 0.2,
-                new FixedSpacingInvestmentConfiguration(0.6, 4),
-                new FixedSpacingInvestmentConfiguration(0.25, 4),
-                new FixedSpacingInvestmentConfiguration(0.15, 4)
+                new FixedSpacingInvestmentConfiguration(0.6, 2),
+                new FixedSpacingInvestmentConfiguration(0.25, 2),
+                new FixedSpacingInvestmentConfiguration(0.15, 2)
         );
 
 

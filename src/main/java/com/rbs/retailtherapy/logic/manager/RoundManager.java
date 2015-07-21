@@ -164,11 +164,12 @@ public class RoundManager {
         System.out.println("Cash in game: " + currentState.getSelfStateResponse().getCashInGame());
         if (expectedRoundState != null){
             for (ShopperTracker expectedUserTracking : expectedRoundState.getUserTracking().values()) {
+                int shopperId = expectedUserTracking.getShopper().getShopperId();
                 Coordinate matchingCoordinate = movementSatisfied(currentState, expectedUserTracking);
                 if (matchingCoordinate != null) {
-                    System.out.println("Shopper " + expectedUserTracking.getShopper().getShopperId() + "  was found where expected: " + matchingCoordinate);
+                    System.out.println("Shopper " + expectedUserTracking.getShopper().getShopperId() + "  was found where expected: " + matchingCoordinate + " successess: " + expectedUserTracking.getSuccessHits() + " failures: " + expectedUserTracking.getFailureHits());
+                    expectedUserTracking.setSuccessHits(expectedUserTracking.getSuccessHits () + 1);
                 } else {
-                    int shopperId = expectedUserTracking.getShopper().getShopperId();
                     Position currentPosision = positionForShopperWithId(currentState, shopperId);
                     System.out.println("Shopper " + shopperId + "  not found where expected! Instead it was in: " + currentPosision);
                     Coordinate starts = from(positionForShopperWithId(previousState, shopperId));
@@ -177,8 +178,9 @@ public class RoundManager {
                     Orientation orientation = Coordinates.orientation(direction, Arrays.asList(starts, ends));
                     System.out.println("This user seems to be following " + orientation);
                     expectedUserTracking.setLatestHint(orientation);
-                    currentState.getUserTracking().put(shopperId, expectedUserTracking);
+                    expectedUserTracking.setFailureHits(expectedUserTracking.getFailureHits () + 1);
                 }
+                currentState.getUserTracking().put(shopperId, expectedUserTracking);
             }
         }
         RoundState roundState = trackShoppers(currentState);
@@ -224,7 +226,7 @@ public class RoundManager {
                 Coordinate coordinate = possibleMovements.values().iterator().next();
                 Collection<AdjacentShop> adjacentShops = influenceArea.get(coordinate);
                 if (adjacentShops != null && adjacentShops.size() > 0){
-                    if (shopperTracker.getCustomer().getPathType().getPaths().size() < 1000) {
+                    if (shopperTracker.getSuccessHits() > 2 && ((shopperTracker.getFailureHits() == 0) || (shopperTracker.getSuccessHits() / shopperTracker.getFailureHits()) > 2)) {
                         System.out.println("Shopper with ID: " + shopperTracker.getShopper().getShopperId() + " is possibly going to be in: " + coordinate);
                         System.out.println("Shopper can be intercepted! Planting an Ad");
                         AdjacentShop adjacentShop = adjacentShops.iterator().next();
@@ -277,10 +279,17 @@ public class RoundManager {
                 if (currentTracking != null && currentTracking.getLatestHint() != null){
                     Map<Orientation, Coordinate> hintedMovement = new HashMap<>();
                     hintedMovement.put(currentTracking.getLatestHint(), developCoordinate(shopper.getCurrentPosition(), currentTracking.getLatestHint()));
-                    shopperTrackers.put(shopper.getShopperId(), new ShopperTracker(shopper.getCurrentPosition(), hintedMovement, currentState.getCustomer(shopper.getShopperId()), shopper));
+                    ShopperTracker hintedShopperTracker = new ShopperTracker(shopper.getCurrentPosition(), hintedMovement, currentState.getCustomer(shopper.getShopperId()), shopper);
+                    hintedShopperTracker.setFailureHits(currentTracking.getFailureHits());
+                    hintedShopperTracker.setSuccessHits(currentTracking.getSuccessHits());
+                    shopperTrackers.put(shopper.getShopperId(), hintedShopperTracker);
                 }else{
                     System.out.println("Shopper " +  shopper.getShopperId() + " in: " + coordinate);
                     ShopperTracker nextMovement = guessFirstMovement(currentState, shopper);
+                    if (currentTracking != null){
+                        nextMovement.setFailureHits(currentTracking.getFailureHits());
+                        nextMovement.setSuccessHits(currentTracking.getSuccessHits());
+                    }
                     shopperTrackers.put(shopper.getShopperId(), nextMovement);
                 }
             }

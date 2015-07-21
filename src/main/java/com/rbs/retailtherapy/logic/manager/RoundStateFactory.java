@@ -64,7 +64,7 @@ public class RoundStateFactory {
                     Coordinate coordinate = new Coordinate(shopResponse.getPosition().getCol(), shopResponse.getPosition().getRow());
                     boolean isMine = shopOwner.getTeamName().equals(myTeamName);
                     ShopTracker shopTracker;
-                    if (isMine){
+                    if (isMine) {
                         shopTracker = new ShopTracker(withCoordinate(selfStateResponse.getShops(), coordinate), isMine);
                     } else {
                         shopTracker = new ShopTracker(shopResponse, isMine);
@@ -78,7 +78,8 @@ public class RoundStateFactory {
 
     private ShopResponse withCoordinate(ShopResponse[] shops, Coordinate coordinate) {
         for (ShopResponse shop : shops) {
-            if (shop.getPosition().getRow() == coordinate.getRow() && shop.getPosition().getCol() == coordinate.getCol()) return shop;
+            if (shop.getPosition().getRow() == coordinate.getRow() && shop.getPosition().getCol() == coordinate.getCol())
+                return shop;
         }
         throw new IllegalStateException();
     }
@@ -140,6 +141,7 @@ public class RoundStateFactory {
                 state.getShops(),
                 state.getSelfStateResponse(),
                 state.getCurrentStep());
+        
         roundState.setUserTracking(state.getUserTracking());
         return roundState;
     }

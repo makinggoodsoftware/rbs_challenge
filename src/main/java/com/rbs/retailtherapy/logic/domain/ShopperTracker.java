@@ -14,6 +14,8 @@ public class ShopperTracker {
     private final ShopperResponse shopper;
     private final Customer customer;
     private Orientation latestHint;
+    private int successHits = 0;
+    private int failureHits = 0;
 
     public ShopperTracker(Position currentPosition, Map<Orientation, Coordinate> possibleMovements, Customer customer, ShopperResponse shopper) {
         this.currentPosition = currentPosition;
@@ -44,5 +46,21 @@ public class ShopperTracker {
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public int getSuccessHits() {
+        return successHits;
+    }
+
+    public void setSuccessHits(int successHits) {
+        this.successHits = successHits;
+    }
+
+    public void setFailureHits(int failureHits) {
+        this.failureHits = failureHits;
+    }
+
+    public int getFailureHits() {
+        return failureHits;
     }
 }
