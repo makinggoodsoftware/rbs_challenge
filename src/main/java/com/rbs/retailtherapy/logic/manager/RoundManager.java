@@ -50,7 +50,7 @@ public class RoundManager {
         List<Bid> bids = shopBidder.bid(gameState, currentState);
         for (Bid bid : bids) {
             RequestShopResponse requestShopResponse = httpGameSession.requestShop(bid.getBidAmount(), bid.getCoordinate().getCol(), bid.getCoordinate().getRow());
-//            System.out.println("Requesting shop in " + bid.getCoordinate() + " result is: " + requestShopResponse.getIsSuccess());
+            System.out.println("Requesting shop in " + bid.getCoordinate() + " result is: " + requestShopResponse.getIsSuccess() + " - " + requestShopResponse.getMessage());
             shopsBidsCoordinates.add(bid.getCoordinate());
         }
         afterBidding.setBidStatus(BidStatus.BID_SENT);
@@ -107,22 +107,19 @@ public class RoundManager {
     }
 
     public RoundState onTradingStep(RoundState currentState, RoundState previousState, RoundState expectedCurrentState) {
-        if (currentState.getCurrentStep() % 7 == 0) {
-            refreshStock(currentState);
-        }
+        refreshStock(currentState);
         return handleShoppers(currentState, previousState, expectedCurrentState, influenceArea(currentState.getShops()));
     }
 
     private void refreshStock(RoundState currentState) {
-        if (currentState.getSelfStateResponse().getCashInRound() < 1000) return;
-//        System.out.println("Refreshing stock");
+        System.out.println("Refreshing stock");
         Stock cheapestStock = cheapest(currentState.getStocks());
         Map<Coordinate, ShopTracker> shops = currentState.getShops();
         for (ShopTracker shopTracker : shops.values()) {
             if (shopTracker.isMine()) {
                 if (currentState.getCurrentStep() - shopTracker.getStockBoughtOn() > 7) {
                     Coordinate coordinate = Coordinates.from(shopTracker.getShopResponse().getPosition());
-//                    System.out.println("Buying stock for shop on: " + coordinate);
+                    System.out.println("Buying stock for shop on: " + coordinate);
                     httpGameSession.buyStock(1, shopTracker.getShopResponse(), cheapestStock.getStockType());
                     currentState.getShops().get(coordinate).setStockBoughtOn(currentState.getCurrentStep());
                 }
@@ -168,7 +165,6 @@ public class RoundManager {
 
     private RoundState handleShoppers(RoundState currentState, RoundState previousState, RoundState expectedRoundState, Multimap<Coordinate, AdjacentShop> influenceArea) {
         System.out.println("Cash in round: " + currentState.getSelfStateResponse().getCashInRound());
-//        System.out.println("Cash in game: " + currentState.getSelfStateResponse().getCashInGame());
         if (expectedRoundState != null) {
             for (ShopperTracker expectedUserTracking : expectedRoundState.getUserTracking().values()) {
                 int shopperId = expectedUserTracking.getShopper().getShopperId();
@@ -176,10 +172,10 @@ public class RoundManager {
                 ShopperResponse shopper = shopperWithId(currentState, shopperId);
                 if (shopper == null) break;
                 if (matchingCoordinate != null) {
-//                    System.out.println("Shopper " + expectedUserTracking.getShopper().getShopperId() + "  was found where expected: " + matchingCoordinate + " successess: " + expectedUserTracking.getSuccessHits() + " failures: " + expectedUserTracking.getFailureHits());
+                    System.out.println("Shopper " + expectedUserTracking.getShopper().getShopperId() + "  was found where expected: " + matchingCoordinate + " successess: " + expectedUserTracking.getSuccessHits() + " failures: " + expectedUserTracking.getFailureHits());
                     expectedUserTracking.setSuccessHits(expectedUserTracking.getSuccessHits() + 1);
                 } else {
-//                    System.out.println("Shopper " + shopperId + "  not found where expected! Instead it was in: " + Coordinates.from(shopper.getCurrentPosition()));
+                    System.out.println("Shopper " + shopperId + "  not found where expected! Instead it was in: " + Coordinates.from(shopper.getCurrentPosition()));
                     expectedUserTracking.setFailureHits(expectedUserTracking.getFailureHits() + 1);
                 }
 //                System.out.println("Cash left: " + shopper.getCashRemaining());
@@ -274,8 +270,8 @@ public class RoundManager {
                                     stockType
                             );
                             afterAds.getShops().get(Coordinates.from(shop.getPosition())).setStockBoughtOn(afterAds.getCurrentStep());
-//                            System.out.println("Ad response was: " + placeAdvertResponse.getIsSuccess() + "[" + placeAdvertResponse.getResponseMessage() + "]");
-//                            System.out.println("Expecting user with ID " + shopperId + " to step in ad " + coordinate + " money spent: " + toSpend + " stock " + stockType);
+                            System.out.println("Ad response was: " + placeAdvertResponse.getIsSuccess() + "[" + placeAdvertResponse.getResponseMessage() + "]");
+                            System.out.println("Expecting user with ID " + shopperId + " to step in ad " + coordinate + " money spent: " + toSpend + " stock " + stockType);
                         } else {
 //                            System.out.println("Not worth the ad!");
                         }

@@ -30,9 +30,32 @@ public class CellDistributor {
 
         List<Coordinate> outterRingCoordinates = new ArrayList<>();
         int stepSize = sortedCoordinates.size() / numberOfDivisions;
+        if (stepSize == 0){
+            stepSize = 1;
+        }
         for (int i=0; i<numberOfDivisions; i++){
-            outterRingCoordinates.add(sortedCoordinates.get(i*stepSize));
+            int toGet = i * stepSize;
+            if (toGet < sortedCoordinates.size()){
+                outterRingCoordinates.add(sortedCoordinates.get(toGet));
+            }
         }
         return outterRingCoordinates;
+    }
+
+    public List<Coordinate> distributeAll(
+            Dimension dimension,
+            int numberOfDivisions
+    ) {
+        if (numberOfDivisions == 0) {
+            throw new IllegalStateException();
+        }
+        Set<Coordinate> allCoordinates = coordinatesSelector.allCoordinates(dimension);
+        List<Coordinate> allCoordinatesAsList = new ArrayList<>(allCoordinates);
+        List<Coordinate> allCoordinatesSplitted = new ArrayList<>();
+        int stepSize = allCoordinatesAsList.size() / numberOfDivisions;
+        for (int i=0; i<numberOfDivisions; i++){
+            allCoordinatesSplitted.add(allCoordinatesAsList.get(i*stepSize));
+        }
+        return allCoordinatesSplitted;
     }
 }

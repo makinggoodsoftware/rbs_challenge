@@ -18,22 +18,22 @@ import java.util.Map;
 
 public class Main {
     public static void main (String... args){
-        String baseUrl = "http://localhost:8081/RetailTherapy/jsonServices";
-        String userName = "Pulsy";
-        String password = "testing";
+//        String baseUrl = "http://localhost:8081/RetailTherapy/jsonServices";
+//        String userName = "Pulsy";
+//        String password = "testing";
 
-//        String baseUrl = "http://stomv11236:8081/RetailTherapy/jsonServices";
-//        String userName = "Making Good Software";
-//        String password = "eastex01";
+        String baseUrl = "http://stomv11236:8081/RetailTherapy/jsonServices";
+        String userName = "Making Good Software";
+        String password = "eastex01";
 
         String customersFileName = "customers.json";
-        double maximumToInvest = 0.8;
+        double maximumToInvest = 0.6;
         InvestmentConfiguration baseInvestmentConfiguration = new InvestmentConfiguration(
-                0.8,
-                0.2,
-                new FixedSpacingInvestmentConfiguration(0.6, 2),
-                new FixedSpacingInvestmentConfiguration(0.25, 2),
-                new FixedSpacingInvestmentConfiguration(0.15, 2)
+                0.7,
+                0.3,
+                new FixedSpacingInvestmentConfiguration(0.6, 4),
+                new FixedSpacingInvestmentConfiguration(0.25, 4),
+                new FixedSpacingInvestmentConfiguration(0.15, 4)
         );
 
 
@@ -53,9 +53,9 @@ public class Main {
         FinanceService financeService = new FinanceService();
         Strategizer strategizer = new Strategizer(financeService, baseInvestmentConfiguration);
         ShopBidder shopBidder = new ShopBidder(investor, potentialShopCellDistributor, strategizer, coordinates);
-        GameManager gameManger = new GameManager(gameState, participantImpl, shopBidder, roundStateFactory, coordinatesSelectors, userName, password, coordinates, customers);
-        RoundProvider roundProvider = new RoundProvider(gameManger, gameState);
+        GameManager gameManager = new GameManager(gameState, participantImpl, shopBidder, roundStateFactory, coordinatesSelectors, userName, password, coordinates, customers);
+        RoundProvider roundProvider = new RoundProvider(gameManager, gameState);
 
-        new GameClock(roundProvider, participantImpl, customers, roundStateFactory).start();
+        new GameClock(roundProvider, participantImpl, customers, roundStateFactory, gameManager, gameState).start();
     }
 }

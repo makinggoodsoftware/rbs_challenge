@@ -30,8 +30,8 @@ public class Investor {
                 investmentConfiguration.getOuter3().getDesiredSpacing(),
                 minimumBid
         );
-        double totalCenetrToInvest = amountToInvest * investmentConfiguration.getCenterInvestmentPercentage();
-        Double numberOfShops = totalCenetrToInvest / minimumBid;
+        double totalCenterToInvest = amountToInvest * investmentConfiguration.getCenterInvestmentPercentage();
+        Double numberOfShops = totalCenterToInvest / minimumBid;
         Investment centerLoopInvestment = new Investment(minimumBid, Math.round(numberOfShops.intValue()));
 
         HashMap<PlacementType, Investment> investments = new HashMap<PlacementType, Investment>();

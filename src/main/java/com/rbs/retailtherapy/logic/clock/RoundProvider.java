@@ -13,13 +13,4 @@ public class RoundProvider {
         this.gameState = gameState;
     }
 
-    public RoundMonitor retrieve(RoundStateResponse roundStateResponse) {
-        RoundMonitor roundMonitor = gameState.getRoundMonitor(roundStateResponse);
-        if (roundMonitor == null){
-            System.out.println("NEW ROUND WITH ID: " + roundStateResponse.getRoundId());
-            roundMonitor = gameManager.onNewRound(roundStateResponse);
-            gameState.addRound (roundStateResponse, roundMonitor);
-        }
-        return roundMonitor;
-    }
 }

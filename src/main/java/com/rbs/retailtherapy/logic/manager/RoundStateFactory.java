@@ -91,7 +91,7 @@ public class RoundStateFactory {
         throw new IllegalStateException();
     }
 
-    private RoundState firstRoundState(RoundStateResponse newState, Map<Coordinate, ShopResponse> myShops, Map<Integer, Customer> customers, SelfStateResponse selfStateResponse) {
+    public RoundState firstRoundState(RoundStateResponse newState, Map<Coordinate, ShopResponse> myShops, Map<Integer, Customer> customers, SelfStateResponse selfStateResponse) {
         StocksPerRound[] stocksPerRound = participantImpl.getGameParameters().getStocks();
         List<Stock> stocks = findStocks(stocksPerRound, newState.getRoundId());
         return new RoundState(

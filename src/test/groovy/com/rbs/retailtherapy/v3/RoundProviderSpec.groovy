@@ -18,15 +18,15 @@ class RoundProviderSpec extends Specification {
         testObj = new RoundProvider(gameManagerMock, gameStateMock)
     }
 
-    def "should create a new round if in new round" (){
-        given:
-        gameStateMock.getRoundMonitor (stateMock) >> null
-        gameManagerMock.onNewRound (stateMock) >> roundMonitorMock
-
-        when:
-        RoundMonitor result = testObj.retrieve (stateMock)
-
-        then:
-        result.is(roundMonitorMock)
-    }
+//    def "should create a new round if in new round" (){
+//        given:
+//        gameStateMock.getRoundMonitor (stateMock) >> null
+//        gameManagerMock.onNewRound (stateMock) >> roundMonitorMock
+//
+//        when:
+//        RoundMonitor result = testObj.retrieve (stateMock)
+//
+//        then:
+//        result.is(roundMonitorMock)
+//    }
 }

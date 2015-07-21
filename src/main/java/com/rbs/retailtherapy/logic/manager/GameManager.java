@@ -22,7 +22,6 @@ public class GameManager {
     private final String password;
     private final RoundStateFactory roundStateFactory;
     private final CoordinatesSelectors coordinatesSelectors;
-    private final Coordinates coordinates;
     private final Map<Integer, Customer> customers;
 
     public GameManager(GameState gameState, ParticipantImpl participantImpl, ShopBidder shopBidder, RoundStateFactory roundStateFactory, CoordinatesSelectors coordinatesSelectors, String userName, String password, Coordinates coordinates, Map<Integer, Customer> customers) {
@@ -33,7 +32,6 @@ public class GameManager {
         this.userName = userName;
         this.password = password;
         this.roundStateFactory = roundStateFactory;
-        this.coordinates = coordinates;
         this.customers = customers;
     }
 
@@ -47,7 +45,12 @@ public class GameManager {
     }
 
     private void updateGameState(RoundStateResponse roundStateResponse) {
-        this.gameState.setMinimumBid(roundStateResponse.getRoundParameters().getBlockerPrice());
+        double blockerPrice = roundStateResponse.getRoundParameters().getBlockerPrice();
+        System.out.println("Blocker price: " + blockerPrice);
+        if (blockerPrice < 10){
+            blockerPrice = 15;
+        }
+        this.gameState.setMinimumBid(blockerPrice);
         this.gameState.setTypeOfShoppers(customers);
     }
 }
